@@ -1,5 +1,5 @@
 import React from 'react';
-import aboutCopy from '../../common/configs/aboutCopy';
+import aboutCopy from '../configs/aboutCopy';
 
 const PortfolioAboutMe: React.FC = () => {
     return (
