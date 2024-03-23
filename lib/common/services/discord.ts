@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import config from '../configs/discord';
 
 class DiscordService {
