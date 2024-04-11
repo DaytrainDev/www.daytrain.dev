@@ -1,4 +1,4 @@
-import AiController from "@/lib/common/controllers/openai";
+import AiController from "@/lib/controllers/openai";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
