@@ -7,7 +7,6 @@ const MapItem = (item: any, index: number) => {
     <div key={index} className="p-8 text-center">
       <a
         href={item.href}
-        className=""
         target={item.target ?? undefined}
         rel="noopener noreferrer"
       >
@@ -33,8 +32,7 @@ export default function Home() {
           Daytrain.dev
         </h1>
         <p>Stuff I build for me to have stuff I&apos;ve built.</p>
-
-        <div className="flex flex-row items-center justify-center">
+        <div className="flex flex-row items-center justify-center z-[1]">
           {[
             {
               title: "Weather",
