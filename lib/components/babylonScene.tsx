@@ -45,9 +45,9 @@ export const BabylonScene = (props : any) => {
       const scene = new Scene(engine, sceneOptions);
       setScene(scene);
       if (scene.isReady()) {
-        props.onSceneReady(scene);
+        props.onSceneReady(scene, reactCanvas.current);
       } else {
-        scene.onReadyObservable.addOnce((scene) => props.onSceneReady(scene));
+        scene.onReadyObservable.addOnce((scene) => props.onSceneReady(scene, reactCanvas.current));
       }
 
       engine.runRenderLoop(() => {
