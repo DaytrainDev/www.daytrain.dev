@@ -1,10 +1,6 @@
 import Image from "next/image";
 import { headers } from 'next/headers'
 
-import DiscordSsoService from "@/lib/services/discord";
-
-const login_url = DiscordSsoService.getAuthUrl('player-dashboard');
-
 const sheet = {
   name: 'Hob',
   playerName: 'Daytrain',
@@ -72,10 +68,6 @@ export default function PlayerDashboard() {
         {/* Add more actions */}
       </div>
 
-      {/* Add login button */}
-      <div className="mt-8">
-        <a href={login_url}><button className="bg-purple-500 text-white px-4 py-2 rounded">Login</button></a>
-      </div>
     </main>
   );
 }
