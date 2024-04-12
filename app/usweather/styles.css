@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.container {
+  max-width: 1280px;
+  min-height: 100vh;
+  color: #000000;
+  background-color: #e6e6e6;
+  padding-bottom: 32px;
+}
+
+.header {
+  color: #ffffff;
+  background-color: #202854;
+  display: flex;
+}
+
+.header-label {
+  font-size: 34px;
+  font-weight: 250;
+  padding: 4px 30px;
+}
+
+.control-wrapper {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 12px 8px;
+}
+
+.control {
+  line-height: 33px;
+  vertical-align: middle;
+  color: #000000;
+  font-size: small;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 200;
+  padding: 4px 14px;
+  height: 41px;
+  width: 240px;
+}
+
+.link-back {
+  display: inline-block;
+  justify-content: right;
+  vertical-align: text-bottom;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 200;
+  padding: 36px 14px 0px;
+}
+
+.content {
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  text-align: center;
+}
+
+.icon-wrapper {
+  margin-top: 12px;
+}
+
+.current-wrapper {
+  max-width: 600px;
+}
+
+.location {
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.temp {
+  font-size: 100px;
+  font-weight: 700;
+  line-height: 115px;
+}
+
+.short-forecast {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 40px;
+}
+
+.update-time {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.detail-forecast {
+  max-width: 100%;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.daily-forecast-label {
+  margin-top: 32px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.daily-forecast-content {
+  margin: 8px 0;
+  width: 100%;
+  display: flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  text-align: center;
+}
+
+.daily-forecast-item {
+  background-color: #ffffff;
+  border: solid 1px #cccccc;
+  border-radius: 16px;
+  flex: 0 0 198px;
+  padding: 24px;
+  margin: 6px;
+  font-weight: 300;
+}
+
+.daily-forecast-icon {
+  display: inline;
+  border-radius: 50%;
+}
+
+.daily-forecast-temp {
+  font-size: 40px;
+  font-weight: 500;
+}

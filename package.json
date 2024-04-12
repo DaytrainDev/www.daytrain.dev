@@ -1,5 +1,5 @@
 {
-  "name": "www.daytrain.dev",
+  "name": "daytrain.dev",
   "version": "0.1.0",
   "private": false,
   "scripts": {
@@ -9,12 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/core": "^0.28.1",
+    "@babylonjs/core": "^7.1.0",
+    "@babylonjs/loaders": "^7.1.0",
+    "@babylonjs/materials": "^7.1.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.15",
     "ai": "^3.0.13",
+    "install": "^0.13.0",
+    "material-ui-popup-state": "^5.1.0",
     "next": "14.1.4",
     "next-auth": "^4.24.7",
+    "npm": "^10.5.1",
     "openai-edge": "^1.2.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.2"
   },
   "devDependencies": {
     "@types/node": "^20",
