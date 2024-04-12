@@ -12,18 +12,13 @@ export const metadata: Metadata = {
   description: "Stuff I build for me to have stuff I've built.",
 };
 
-export default function RootLayout({
-  children,
-  session,
-}: any) {
+export default function RootLayout({ children, session }: any) {
   return (
-    // <html lang="en">
-    //   <body className={inter.className}>
-    <>
-      <TopBar session={session} />
-      {children}
-    </>
-    //   </body>
-    // </html>
+    <html lang="en">
+      <body className={inter.className}>
+        <TopBar session={session} />
+        {children}
+      </body>
+    </html>
   );
 }
