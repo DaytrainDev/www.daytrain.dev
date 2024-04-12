@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react';
 
 import './styles.css'
+import { debounce } from '@mui/material';
+import { SessionProvider, useSession } from 'next-auth/react';
 
 const constants = {
   "days": ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
@@ -47,27 +49,45 @@ async function getData(searchText: string) {
   return { forecast, location } as any;
 }
 
-export default function Home() {
+function Home() {
   let timeout: NodeJS.Timeout;
   let signal: AbortSignal;
   const [searchText, setSearchText] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [searchResultData, setSearchResultData]: any = useState(null);
+  const session = useSession();
+
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateData = useCallback(async (incSearchText: string) => {
-    setLoading(true);
-    const data = await getData(incSearchText);
-    if (data?.error) {
-      setErrorMsg(data.error);
-    } else if (data) {
-      setErrorMsg('');
-      setSearchResultData(data);
-    }
-    setLoading(false);
-  // throttle this request to allow for full use rinput and avoid hitting api limits
-  }, []);
+  const updateData = useCallback(
+    debounce(async (incSearchText: string) => {
+      setLoading(true);
+      const data = await getData(incSearchText);
+      if (data?.error) {
+        setErrorMsg(data.error);
+      } else if (data) {
+        setErrorMsg('');
+        setSearchResultData(data);
+      }
+      setLoading(false);
+    }, 1250),
+    []
+  );
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // const updateData = useCallback(async (incSearchText: string) => {
+  //   setLoading(true);
+  //   const data = await getData(incSearchText);
+  //   if (data?.error) {
+  //     setErrorMsg(data.error);
+  //   } else if (data) {
+  //     setErrorMsg('');
+  //     setSearchResultData(data);
+  //   }
+  //   setLoading(false);
+  // // throttle this request to allow for full use rinput and avoid hitting api limits
+  // }, []);
 
   useEffect(() => {
     const defaultSearchText = '66044';
@@ -88,16 +108,21 @@ export default function Home() {
   // TODO: group day and night forecasts
 
   return (
+    (session.status === 'loading')
+    ? (<div>Loading...</div>)
+    : !(session.status === 'authenticated')
+    ? (<div>You need to be logged in to weather.</div>)
+    : (
     <main className="container">
       <div className="header">
         <div className="header-label">
           US Weather
         </div>
         <div className="control-wrapper">
-          <input className="control" value={searchText} onChange={handleSearchInput} type="text" placeholder="Enter Zipcode, City, or State" />
+          <input className="control text-slate-800" value={searchText} onChange={handleSearchInput} type="text" placeholder="Enter Zipcode, City, or State" />
         </div>
         <div className="link-back">
-          <a href="https://daytrain.dev/" target="_blank" rel="noreferrer">...back to daytrain.dev</a>.
+          <a href="/" rel="noreferrer">...back to home</a>
         </div>
       </div>
       <div className={loading ? 'content' : 'hidden'}> 
@@ -161,5 +186,16 @@ export default function Home() {
         </div>
       </div>
     </main>
-  )
+  ));
 }
+
+const Page = ({ session }: any) => {
+
+  return (
+    <SessionProvider session={session}>
+      <Home />
+    </SessionProvider>
+  );
+}
+
+export default Page;

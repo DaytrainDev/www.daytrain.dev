@@ -10,8 +10,8 @@ declare module "next-auth" {
     user: {
         name: string,
         image?: string,
+        email?: string,
         discord?: DiscordProfile,
-        cfg: CfgProfile,
     }
   }
 }
