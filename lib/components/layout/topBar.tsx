@@ -66,15 +66,41 @@ const UserMenu = ({
           >
             Use {isDark ? "Light" : "Dark"} Mode
           </MenuItem> */}
+        <a href="/"><MenuItem
+          onClick={() => {
+            popupState.close();
+          }}
+        >Home
+        </MenuItem></a>
         {isAuth ? (
-          <MenuItem
-            onClick={() => {
-              popupState.close();
-              handleLogout();
-            }}
-          >
-            Logout
-          </MenuItem>
+          <>
+            <a href="/chat"><MenuItem
+              onClick={() => {
+                popupState.close();
+              }}
+            >Chatbot</MenuItem></a>
+            {/* <a href="/imagen"><MenuItem
+              onClick={() => {
+                popupState.close();
+              }}
+            >ImaGen</MenuItem></a> */}
+            <a href="/usweather"><MenuItem
+              onClick={() => {
+                popupState.close();
+              }}
+            >US Weather</MenuItem></a>
+            <a href="/babylonjs"><MenuItem
+              onClick={() => {
+                popupState.close();
+              }}
+            >3D Demo</MenuItem></a>
+            <MenuItem
+              onClick={() => {
+                popupState.close();
+                handleLogout();
+              }}
+            >Logout</MenuItem>
+          </>
         ) : (
           <MenuItem
             onClick={() => {
