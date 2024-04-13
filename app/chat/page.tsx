@@ -65,8 +65,11 @@ const ChatUI = () => {
       </div>
     </>
   ) : (
-    <div className="flex flex-col">
-      <div className="border-slate-100">
+    <div className="flex flex-col items-center">
+      <div className="flex flex-row items-center">
+        <h1 className="border-slate-100 border-2 border-solid p-2">Chatbot</h1>
+      </div>
+      <div className="border-slate-100 border-2 border-solid p-2">
         {messages.map((message, index) => (
           <p key={index}>
             {message.role}: {message.content}
@@ -74,7 +77,7 @@ const ChatUI = () => {
         ))}
       </div>
       <input
-        className="text-slate-800 w-100"
+        className="bg-slate-800  w-100"
         type="text"
         placeholder="Type your message..."
         onKeyDown={(e: any) => {
@@ -86,7 +89,7 @@ const ChatUI = () => {
       />
       <div className="flex flex-row items-center">
         <button
-          className="p-4"
+          className="border-2 border-solid p-2"
           onClick={(e: any) => {
             handleSendMessage(e.target.value);
           }}
@@ -94,7 +97,7 @@ const ChatUI = () => {
           Send
         </button>
         <a href="/" rel="noreferrer">
-          <button className="p-4">
+          <button className="border-2 border-solid p-2">
             Go Home
           </button>
         </a>

@@ -37,19 +37,19 @@ const ImageUI = () => {
     </>
   ) : (
     <div className="flex flex-col">
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center border-2 border-solid p-2">
 
-        <textarea className="text-slate-800" ref={promptRef} rows={4} cols={80} />
+        <textarea className="bg-slate-800 border-2 border-solid p-2" ref={promptRef} rows={4} cols={80} />
       </div>
       <div className="flex flex-row items-center">
         <button
-          className="p-4"
+          className="border-2 border-solid p-2"
           onClick={handleGenerate}
         >
           Generate
         </button>
         <a href="/" rel="noreferrer">
-          <button className="p-4">
+          <button className="border-2 border-solid p-2">
             Go Home
           </button>
         </a>
