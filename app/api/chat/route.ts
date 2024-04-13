@@ -1,12 +1,26 @@
 import AiController from "@/lib/controllers/openai";
 import { NextRequest, NextResponse } from "next/server";
+import { ChatCompletionRequestMessage } from "openai-edge";
 
 export const GET = async (request: NextRequest) => {
-    const response = await AiController.chatCompletionGet(request);
-    return NextResponse.json(response);
+  const url = new URL(request.url);
+  const queryParams = new URLSearchParams(url.search);
+  
+  const user = queryParams.get('user') ?? 'user';
+  const messagesRaw = queryParams.get('messages');
+
+  if (!messagesRaw) {
+    return new Response('Messages are required.', { status: 400 });
+  }
+
+  const messages: ChatCompletionRequestMessage[] = JSON.parse(messagesRaw);
+  const response = await AiController.chat({ messages, user });
+  
+  return NextResponse.json(response);
 };
 
 export const POST = async (request: NextRequest) => {
-    const response = await AiController.chatCompletionPost(request);
-    return NextResponse.json(response);
+  const data = await request.json();
+  const response = await AiController.chat(data);
+  
 };

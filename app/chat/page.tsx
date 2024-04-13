@@ -55,8 +55,15 @@ const ChatUI = () => {
 
   return session.status === "loading" ? (
     <div>Loading...</div>
-  ) : !(session.status === "authenticated") ? (
-    <div>You need to be logged in to chat.</div>
+  ) : !(session.status === "authenticated") ?  (
+    <>
+      <div>You need to be logged in to chat.</div>
+      <div className="link-back">
+        <a href="/" target="_blank" rel="noreferrer">
+          ...back to home
+        </a>
+      </div>
+    </>
   ) : (
     <div className="flex flex-col">
       <div className="border-slate-100">
@@ -87,12 +94,7 @@ const ChatUI = () => {
           Send
         </button>
         <a href="/" rel="noreferrer">
-          <button
-          className="p-4"
-            onClick={(e: any) => {
-              handleSendMessage(e.target.value);
-            }}
-          >
+          <button className="p-4">
             Go Home
           </button>
         </a>

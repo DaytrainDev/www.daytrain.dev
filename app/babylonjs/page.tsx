@@ -80,15 +80,14 @@ const Scene = () => {
 
   return session.status === "loading" ? (
     <div>Loading...</div>
-  ) : !(session.status === "authenticated") ? (
+  ) : !(session.status === "authenticated") ?  (<>
     <div>You need to be logged in to babylon.</div>
-  ) : (
+    <div className="link-back">
+      <a href="/" rel="noreferrer">...back to home</a>
+    </div>
+  </>
+) : (
     <>
-      <div className="link-back">
-        <a href="/" target="_blank" rel="noreferrer">
-          ...back to home
-        </a>
-      </div>
       <BabylonScene
         antialias
         onSceneReady={onSceneReady}

@@ -47,7 +47,7 @@ const forecastItem = (item: any) => {
   )
 }
 
-function Home() {
+function Weather() {
   let timeout: NodeJS.Timeout;
   let signal: AbortSignal;
   const [searchText, setSearchText] = useState('');
@@ -75,7 +75,6 @@ function Home() {
     []
   );
 
-
   useEffect(() => {
     const defaultSearchText = '66044';
     setSearchText(defaultSearchText),
@@ -98,7 +97,13 @@ function Home() {
     (session.status === 'loading')
     ? (<div>Loading...</div>)
     : !(session.status === 'authenticated')
-    ? (<div>You need to be logged in to weather.</div>)
+    ? (<>
+        <div>You need to be logged in to weather.</div>
+        <div className="link-back">
+          <a href="/" rel="noreferrer">...back to home</a>
+        </div>
+      </>
+    )
     : (
     <main className="container">
       <div className="header">
@@ -158,7 +163,7 @@ const Page = ({ session }: any) => {
 
   return (
     <SessionProvider session={session}>
-      <Home />
+      <Weather />
     </SessionProvider>
   );
 }

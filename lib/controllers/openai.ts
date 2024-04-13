@@ -1,11 +1,21 @@
 import { NextRequest } from "next/server";
 import OpenAI from "../services/openai";
-import { ChatCompletionRequestMessage } from "openai-edge";
+import { ChatCompletionRequestMessage, CreateImageRequestSizeEnum } from "openai-edge";
 
 class AiController {
-  public static async chatCompletionPost(request: NextRequest) {
-    const requestBody = await request.json();
-    const { messages, user } = requestBody;
+  public static async imagine(data: any) {
+    const response = await OpenAI.createImage({
+      prompt: data.prompt,
+      n: data.n ?? 1,
+      size: data.size ?? CreateImageRequestSizeEnum._512x512,
+      user: data.user,
+      // response_format?: CreateImageRequestResponseFormatEnum;
+    });
+    return response;
+  }
+
+  public static async chat(data: any) {
+    const { messages, user } = data;
 
     if (!messages) {
       return new Response('Messages are required.', { status: 400 });
@@ -22,32 +32,6 @@ class AiController {
 
     return responseData?.choices[0]?.message;
   }
-
-  public static async chatCompletionGet(request: NextRequest) {
-    const url = new URL(request.url);
-    const queryParams = new URLSearchParams(url.search);
-    
-    const user = queryParams.get('user') ?? 'user';
-    const messagesRaw = queryParams.get('messages');
-    console.log(messagesRaw);
-    if (!messagesRaw) {
-      return new Response('Messages are required.', { status: 400 });
-    }
-
-    const messages: ChatCompletionRequestMessage[] = JSON.parse(messagesRaw);
-    const response = await OpenAI.createChatCompletion({ 
-      model: 'gpt-3.5-turbo',
-      messages,
-      user,
-    });
-
-    const responseData = await response.json();
-
-    // return new Response(responseData.choices[0].message.content);
-
-    return responseData?.choices[0]?.message;
-  }
-  
 }
 
 export default AiController;
