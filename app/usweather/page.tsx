@@ -23,30 +23,28 @@ const toOrdinalSuffix = (num: string) => {
     : ordinals[3];
 };
 
-async function getData(searchText: string) {
-  if (!searchText || searchText.length < 2) return;
-  const errmsg = 'Forecast for Location not Found';
-
-  // TODO: parse state codes into state names or do seperate zip code lookup
-  const geocodeResponse = await fetch(`https://geocode.xyz/${encodeURIComponent(searchText)}?region='US'&json=1`);
-  const {latt, longt } = await geocodeResponse.json();
-  if (isNaN(latt) || isNaN(longt)) return { error: errmsg };
-
-  const gridpointResponse = await fetch(`https://api.weather.gov/points/${latt},${longt}`);
-  const parsedGridpointResponse = await gridpointResponse.json();
-  if (!parsedGridpointResponse?.properties) return { error: errmsg };
-
-  const { properties: { forecast: forcastEndpoint, relativeLocation: { properties: location } } } = parsedGridpointResponse;
-  if (!forcastEndpoint) return { error: errmsg };
-
-  const forecastResponse = await fetch(forcastEndpoint);
-  const parsedForecastResponse = await forecastResponse.json();
-  if (!parsedForecastResponse) return { error: errmsg };
-
-  const { properties: forecast } = parsedForecastResponse;
-  if (!forecast) return { error: errmsg };
-
-  return { forecast, location } as any;
+const forecastItem = (item: any) => {
+  const dateObj = item?.startTime && new Date(item?.startTime);
+  const dayOfWeek = dateObj && `${constants.days[dateObj.getDay(dateObj)]}`;
+  const dayOfMonth = dateObj && `${dateObj.getDate(dateObj)}`;
+  const ordinal = dateObj && `${toOrdinalSuffix(dayOfMonth)}`;
+  
+  return (
+    <div key={item.number} className="daily-forecast-item">
+      <p>{dayOfMonth}<small>{ordinal}</small></p>
+      <p>{item?.name}</p>
+      {item?.icon && <Image
+        className="daily-forecast-icon"
+        src={item?.icon}
+        alt={item?.shortForecast}
+        width={90}
+        height={90}
+        priority
+      />}
+      <div className="daily-forecast-temp">{`${item?.temperature}`}&deg;</div>
+      {item?.shortForecast}
+    </div>
+  )
 }
 
 function Home() {
@@ -62,8 +60,10 @@ function Home() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateData = useCallback(
     debounce(async (incSearchText: string) => {
+      if (!incSearchText || incSearchText.length < 2) return;
       setLoading(true);
-      const data = await getData(incSearchText);
+      const data = await fetch(`/api/weather?search=${encodeURIComponent(incSearchText)}`)
+        .then((res) => res.json());
       if (data?.error) {
         setErrorMsg(data.error);
       } else if (data) {
@@ -75,19 +75,6 @@ function Home() {
     []
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const updateData = useCallback(async (incSearchText: string) => {
-  //   setLoading(true);
-  //   const data = await getData(incSearchText);
-  //   if (data?.error) {
-  //     setErrorMsg(data.error);
-  //   } else if (data) {
-  //     setErrorMsg('');
-  //     setSearchResultData(data);
-  //   }
-  //   setLoading(false);
-  // // throttle this request to allow for full use rinput and avoid hitting api limits
-  // }, []);
 
   useEffect(() => {
     const defaultSearchText = '66044';
@@ -160,29 +147,7 @@ function Home() {
           Extended Forecast
         </div>
         <div className="daily-forecast-content"> 
-          {dailyForecast?.map((item: any) => {
-            const dateObj = item?.startTime && new Date(item?.startTime);
-            const dayOfWeek = dateObj && `${constants.days[dateObj.getDay(dateObj)]}`;
-            const dayOfMonth = dateObj && `${dateObj.getDate(dateObj)}`;
-            const ordinal = dateObj && `${toOrdinalSuffix(dayOfMonth)}`;
-            
-            return (
-              <div key={item.number} className="daily-forecast-item">
-                <p>{dayOfMonth}<small>{ordinal}</small></p>
-                <p>{item?.name}</p>
-                {item?.icon && <Image
-                  className="daily-forecast-icon"
-                  src={item?.icon}
-                  alt={item?.shortForecast}
-                  width={90}
-                  height={90}
-                  priority
-                />}
-                <div className="daily-forecast-temp">{`${item?.temperature}`}&deg;</div>
-                {item?.shortForecast}
-              </div>
-            )
-          })}
+          {dailyForecast?.map(forecastItem)}
         </div>
       </div>
     </main>
