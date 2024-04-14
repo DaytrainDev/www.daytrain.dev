@@ -61,7 +61,7 @@ const ChatUI = () => {
   ) : (
     <div className="flex flex-col items-center">
       <div className="flex flex-row items-center">
-        <h1 className="border-slate-100 border-2 border-solid p-2">Chatbot</h1>
+        <h1 className="border-slate-100 border-2 border-dashed p-2">Chatbot</h1>
       </div>
       <div className="border-slate-100 border-2 border-solid p-2">
         {messages.map((message, index) => (

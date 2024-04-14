@@ -1,12 +1,13 @@
 import Image from "next/image";
-import { SessionProvider } from "next-auth/react";
+import authConfig from "@/lib/config/auth";
+import { getServerSession } from "next-auth";
 
 const MapItem = (item: any, index: number) => {
 
   return (
     <div key={index} className="p-8 text-center">
       <a
-        href={item.href}
+        href={item.href ?? undefined}
         target={item.target ?? undefined}
         rel="noopener noreferrer"
       >
@@ -24,7 +25,9 @@ const MapItem = (item: any, index: number) => {
   );
 };
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authConfig);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="relative flex flex-col place-items-center">
@@ -35,24 +38,10 @@ export default function Home() {
         <div className="flex flex-row items-center justify-center">
           {[
             {
-              title: "Weather",
-              description: "See weather.",
-              href: "/usweather",
+              title: !session ? "Login" : "Logout",
+              description: !session ? "Use apps." : "Done here.",
+              href: !session ? "/api/auth/signin" : "/api/auth/signout",
             },
-            {
-              title: "Chat",
-              description: "Chat with bot.",
-              href: "/chat",
-            },
-            {
-              title: "3D Demo",
-              description: "WASD to move.",
-              href: "/babylonjs",
-            },
-          ].map(MapItem)}
-        </div>
-        <div className="flex flex-row items-center justify-center">
-          {[
             {
               title: "Crit-Fumble",
               description: "Pretend with dice.",

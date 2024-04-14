@@ -41,13 +41,15 @@ const ImageUI = () => {
       <div>You need to be logged in to imagine.</div>
     </>
   ) : (
-    <div className="flex flex-col">
-      <h1>ImaGen</h1>
+    <div className="flex flex-col items-center">
+    <div className="flex flex-row items-center">
+      <h1 className="border-slate-100 border-2 border-dashed p-2">ImaGen</h1>
+    </div>
       {imageUrl && <div>
         <Image src={`${imageUrl}`} alt={`${promptRef.current?.value}`} width="1024" height="1024" />
       </div>}
       <div className="flex flex-row items-center border-2 border-solid p-2">
-        <textarea className="bg-slate-800 border-2 border-solid p-2" ref={promptRef} rows={4} cols={80} />
+        <textarea className="bg-slate-800 border-2 border-solid p-2" ref={promptRef} rows={4} cols={60} />
       </div>
       <div className="flex flex-row items-center">
         <button

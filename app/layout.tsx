@@ -15,9 +15,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children, session }: any) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} w-full`}>
         <TopBar session={session} />
-        {children}
+        <div className="pt-12">
+          {children}
+        </div>
       </body>
     </html>
   );

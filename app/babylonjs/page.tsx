@@ -105,14 +105,18 @@ const Scene = () => {
     <div>You need to be logged in to babylon.</div>
   </>
 ) : (
-    <>
+    <div className="flex flex-col items-center">
+      <div className="flex flex-row items-center">
+        <h1 className="border-slate-100 border-2 border-dashed p-2">3D Demo</h1>
+        <p className="p-2">WASD to move.</p>
+      </div>
       <BabylonScene
         antialias
         onSceneReady={onSceneReady}
         onRender={onRender}
         id="babylonjs-canvas"
       />
-    </>
+    </div>
   );
 };
 
