@@ -113,9 +113,6 @@ function Weather() {
         <div className="control-wrapper">
           <input className="control text-slate-800" value={searchText} onChange={handleSearchInput} type="text" placeholder="Enter Zipcode, City, or State" />
         </div>
-        <div className="link-back">
-          <a href="/" rel="noreferrer">...back to home</a>
-        </div>
       </div>
       <div className={loading ? 'content' : 'hidden'}> 
         Loading...

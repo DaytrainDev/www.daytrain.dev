@@ -1,3 +1,4 @@
+"use server";
 import * as geocodeService from './geocode';
 
 export const search = async (searchText: string) => {

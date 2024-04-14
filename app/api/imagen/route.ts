@@ -13,7 +13,7 @@ export const GET = async (request: NextRequest) => {
   const url = new URL(request.url);
   const queryParams = new URLSearchParams(url.search);
   
-  const user = queryParams.get('user') ?? 'user';
+  const user = queryParams.get('user') ?? session.user?.email ?? session.user?.discord?.id;
   const prompt = queryParams.get('prompt');
 
   if (!prompt) {
@@ -23,7 +23,6 @@ export const GET = async (request: NextRequest) => {
   const response = await AiController.imagen({ prompt, user, size: CreateImageRequestSizeEnum._1024x1024 });
   
   return NextResponse.json(response);
-    return NextResponse.json(response);
 };
 
 export const POST = async (request: NextRequest) => {
@@ -33,6 +32,8 @@ export const POST = async (request: NextRequest) => {
   }
   
   const data = await request.json();
+  data.user = data.user ?? session.user?.email ?? session.user?.discord?.id;
+  
   const response = await AiController.imagen(data);
 
   return NextResponse.json(response);

@@ -12,7 +12,6 @@ const getBotResponse = (messages: any, setMessages: Function, user: string) => {
       },
     })
       .then((res) => res?.json())
-      // .then(res => JSON.parse(res))
       .then((message) => {
         setMessages((prevMessages: any) => {
           return [...prevMessages, message];
@@ -58,11 +57,6 @@ const ChatUI = () => {
   ) : !(session.status === "authenticated") ?  (
     <>
       <div>You need to be logged in to chat.</div>
-      <div className="link-back">
-        <a href="/" target="_blank" rel="noreferrer">
-          ...back to home
-        </a>
-      </div>
     </>
   ) : (
     <div className="flex flex-col items-center">
@@ -96,11 +90,6 @@ const ChatUI = () => {
         >
           Send
         </button>
-        <a href="/" rel="noreferrer">
-          <button className="border-2 border-solid p-2">
-            Go Home
-          </button>
-        </a>
       </div>
     </div>
   );

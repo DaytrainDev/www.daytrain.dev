@@ -73,17 +73,17 @@ const UserMenu = ({
         >Home
         </MenuItem></a>
         {isAuth ? (
-          <>
+          <div>
             <a href="/chat"><MenuItem
               onClick={() => {
                 popupState.close();
               }}
             >Chatbot</MenuItem></a>
-            {/* <a href="/imagen"><MenuItem
+            <a href="/imagen"><MenuItem
               onClick={() => {
                 popupState.close();
               }}
-            >ImaGen</MenuItem></a> */}
+            >ImaGen</MenuItem></a>
             <a href="/usweather"><MenuItem
               onClick={() => {
                 popupState.close();
@@ -100,7 +100,7 @@ const UserMenu = ({
                 handleLogout();
               }}
             >Logout</MenuItem>
-          </>
+          </div>
         ) : (
           <MenuItem
             onClick={() => {

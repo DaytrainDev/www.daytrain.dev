@@ -13,7 +13,7 @@ export const GET = async (request: NextRequest) => {
   const url = new URL(request.url);
   const queryParams = new URLSearchParams(url.search);
   
-  const user = queryParams.get('user') ?? 'user';
+  const user = queryParams.get('user') ?? session.user?.email ?? session.user?.discord?.id;
   const messagesRaw = queryParams.get('messages');
 
   if (!messagesRaw) {
@@ -33,6 +33,7 @@ export const POST = async (request: NextRequest) => {
   }
   
   const data = await request.json();
+  data.user = data.user ?? session.user?.email ?? session.user?.discord?.id;
   const response = await AiController.chat(data);
   
   return NextResponse.json(response);

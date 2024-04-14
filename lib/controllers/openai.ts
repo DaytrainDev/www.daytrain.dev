@@ -12,7 +12,9 @@ class AiController {
       user: user,
       // response_format?: CreateImageRequestResponseFormatEnum;
     });
-    return response;
+    const responseData = await response.json();
+
+    return responseData?.data[0];
   }
 
   public static async chat(data: any) {
@@ -28,7 +30,6 @@ class AiController {
       messages,
       user,
     });
-
     const responseData = await response.json();
 
     return responseData?.choices[0]?.message;
