@@ -2,13 +2,8 @@
 import React from "react";
 import {
   ArcRotateCamera,
-  CannonJSPlugin,
-  Color3,
   HemisphericLight,
-  Mesh,
   MeshBuilder,
-  StandardMaterial,
-  Tools,
   Vector3,
 } from "@babylonjs/core";
 import "@babylonjs/loaders";
@@ -28,12 +23,8 @@ let player = {
 } as any;
 
 const onSceneReady = (scene: any, canvas: any) => {
-  // var physicsPlugin = new CannonJSPlugin();
-  // var gravityVector = new Vector3(0,-9.81, 0);
-  // scene.enablePhysics(gravityVector, physicsPlugin);
   const engine = scene.getEngine();
-  // scene.createDefaultCamera(true);
-  var camera = new ArcRotateCamera(
+  new ArcRotateCamera(
     "Camera",
     (3 * Math.PI) / 2,
     Math.PI / 8,
@@ -41,7 +32,6 @@ const onSceneReady = (scene: any, canvas: any) => {
     Vector3.Zero(),
     scene
   );
-  // camera.attachControl(canvas, true);
 
   var light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
   light.intensity = 1;
@@ -72,19 +62,6 @@ const onSceneReady = (scene: any, canvas: any) => {
       console.log("move", direction, distance);
       player.token.translate(direction, distance);
     }
-
-    // // TODO: jumping
-    // if (kbInfo.type === 1 && kbInfo.event.key === " ") {
-    //   sphere.position.y += 0.1;
-    //   console.log("UP");
-    // }
-    // if (kbInfo.type === 1 && kbInfo.event.key === "c") {
-    //   sphere.position.y -= 0.1;
-    //   console.log("DOWN");
-    // }
-
-    // console.log(kbInfo.event.key);
-    // TODO: actions
   });
 
   return scene;
