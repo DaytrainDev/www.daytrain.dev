@@ -1,74 +1,34 @@
-"use client";
-import { SessionProvider, useSession } from "next-auth/react";
-import Image from 'next/image'
-import { useEffect, useMemo, useRef, useState } from "react";
+"use server";
+import { ImagenSession } from "@/lib/components/imagen";
+import AiController from "@/lib/controllers/openai";
+import { getServerSession } from "next-auth";
+import authConfig from "@/lib/config/auth";
+import { CreateImageRequestSizeEnum } from "openai-edge";
 
-const ImageUI = () => {
-  const session = useSession();
-  const [ imageUrl, setImageUrl ] = useState('');
-  const promptRef = useRef(null as any);
-  
-  const prompt = useMemo(() => {
-    return promptRef.current?.value ?? "";
-  }, []);
 
-  async function handleGenerate() {
-    console.log(prompt)
-    const imageResponse = await fetch("/api/imagen", {
-      method: "POST",
-      body: JSON.stringify({
-        prompt: promptRef.current?.value,
-        size: "1024x1024",
-        user: session?.data?.user?.email ?? session?.data?.user?.discord?.id,
-        n: 1,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setImageUrl(data?.url ?? imageUrl)
-        return data;
-      });
-    console.log(imageResponse);
+
+const handleSubmit = async (prompt: string, user: string) => {
+  "use server";
+  const session = await getServerSession(authConfig);
+  if (!session) {
+    return new Response('Unauthorized', { status: 401 });
   }
 
-  return session.status === "loading" ? (
-    <div>Loading...</div>
-  ) : !(session.status === "authenticated") ?  (
-    <>
-      <div>You need to be logged in to imagine.</div>
-    </>
-  ) : (
-    <div className="flex flex-col items-center">
-    <div className="flex flex-row items-center">
-      <h1 className="border-slate-100 border-2 border-dashed p-2">ImaGen</h1>
-    </div>
-      {imageUrl && <div>
-        <Image src={`${imageUrl}`} alt={`${promptRef.current?.value}`} width="1024" height="1024" />
-      </div>}
-      <div className="flex flex-row items-center border-2 border-solid p-2">
-        <textarea className="bg-slate-800 border-2 border-solid p-2" ref={promptRef} rows={4} cols={60} />
-      </div>
-      <div className="flex flex-row items-center">
-        <button
-          className="border-2 border-solid p-2"
-          onClick={handleGenerate}
-        >
-          Generate
-        </button>
-      </div>
-    </div>
-  );
-};
+  if (!prompt) {
+    return new Response('Prompt is required.', { status: 400 });
+  }
 
-const ChatPage = ({ session }: any) => {
+  const response = await AiController.imagen({ prompt, user, size: CreateImageRequestSizeEnum._1024x1024 });
+
+  return response;
+};
+  
+
+const Page = ({ session }: any) => {
+  "use server";
+
   return (
-    <SessionProvider session={session}>
-      <ImageUI />
-    </SessionProvider>
+    <ImagenSession session={session} handleSubmit={handleSubmit} />
   );
-};
-
-export default ChatPage;
+}
+export default Page;
