@@ -7,13 +7,11 @@ const ImagenUI = ({handleSubmit}: any) => {
   const session = useSession();
   const [ imageUrl, setImageUrl ] = useState('');
   const promptRef = useRef(null as any);
-  
-  const prompt = useMemo(() => {
-    return promptRef.current?.value ?? "";
-  }, []);
 
   async function handleGenerate() {
-    const imageResponse = await handleSubmit(prompt, session?.data?.user?.email ?? session?.data?.user?.discord?.id)
+    const incPrompt = promptRef.current?.value;
+    promptRef.current.value = '';
+    const imageResponse = await handleSubmit(incPrompt, session?.data?.user?.email ?? session?.data?.user?.discord?.id)
     setImageUrl(imageResponse?.url ?? imageUrl)
   }
 
@@ -32,16 +30,23 @@ const ImagenUI = ({handleSubmit}: any) => {
         <Image src={`${imageUrl}`} alt={`${promptRef.current?.value}`} width="1024" height="1024" />
       </div>}
       <div className="flex flex-row items-center border-2 border-solid p-2">
-        <textarea className="bg-slate-800 border-2 border-solid p-2" ref={promptRef} rows={4} cols={60} />
+        <textarea className="bg-slate-800 border-2 border-solid p-2" 
+          ref={promptRef} 
+          rows={4} cols={60} 
+          onKeyDown={(e: any) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleGenerate();
+            }
+          }}
+        />
       </div>
-      <div className="flex flex-row items-center">
-        <button
-          className="border-2 border-solid p-2"
-          onClick={handleGenerate}
-        >
-          Generate
-        </button>
-      </div>
+      <button
+        className="border-2 border-solid p-2"
+        onClick={handleGenerate}
+      >
+        Generate
+      </button>
     </div>
   );
 };

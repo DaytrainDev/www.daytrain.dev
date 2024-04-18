@@ -1,13 +1,14 @@
 "use client";
 
 import { SessionProvider, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ChatUI = ({ handleSubmit }: any) => {
   const session = useSession();
 
   // Rest of the code
   const [messages, setMessages] = useState<any[]>([]);
+  const promptRef = useRef(null as any);
 
   const handleBotResponse = async (messages: any) => {
     if (session?.data?.user && messages.length > 0) {
@@ -33,11 +34,9 @@ const ChatUI = ({ handleSubmit }: any) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
-  const handleSendMessage = async (content: string) => {
-    // Send the message to Chat GPT and handle the response
-    // You can use a library like axios to make API requests
-
-    // For now, let's just add the message to the list of messages
+  const handleSendMessage = async () => {
+    const content = promptRef.current?.value;
+    promptRef.current.value = "";
     setMessages((prevMessages) => {
       return [...prevMessages, { content, role: "user" }];
     });
@@ -60,28 +59,23 @@ const ChatUI = ({ handleSubmit }: any) => {
             {message.role}: {message.content}
           </p>
         ))}
-      </div>
-      <input
-        className="bg-slate-800  w-100"
-        type="text"
-        placeholder="Type your message..."
-        onKeyDown={(e: any) => {
-          if (e.key === "Enter") {
-            handleSendMessage(e.target.value);
-            e.target.value = "";
-          }
-        }}
-      />
-      <div className="flex flex-row items-center">
+      </div>        
+      <textarea className="bg-slate-800 border-2 border-solid p-2" 
+          ref={promptRef} 
+          rows={1} cols={60} 
+          onKeyDown={(e: any) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSendMessage();
+            }
+          }}
+        />
         <button
           className="border-2 border-solid p-2"
-          onClick={(e: any) => {
-            handleSendMessage(e.target.value);
-          }}
+          onClick={handleSendMessage}
         >
           Send
         </button>
-      </div>
     </div>
   );
 };

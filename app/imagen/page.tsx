@@ -1,26 +1,27 @@
 "use server";
 import { ImagenSession } from "@/lib/components/imagen";
 import AiController from "@/lib/controllers/openai";
-import { getServerSession } from "next-auth";
-import authConfig from "@/lib/config/auth";
 import { CreateImageRequestSizeEnum } from "openai-edge";
 
 
 
-const handleSubmit = async (prompt: string, user: string) => {
+const handleSubmit = async (
+  prompt: string, 
+  user: string, 
+  size: CreateImageRequestSizeEnum = CreateImageRequestSizeEnum._512x512 
+) => {
   "use server";
-  const session = await getServerSession(authConfig);
-  if (!session) {
-    return new Response('Unauthorized', { status: 401 });
-  }
 
   if (!prompt) {
-    return new Response('Prompt is required.', { status: 400 });
+    return { error: 'Prompt is required.'};
   }
 
-  const response = await AiController.imagen({ prompt, user, size: CreateImageRequestSizeEnum._1024x1024 });
+  const response = await AiController.imagen({ prompt, user, size });
 
-  return response;
+  return {
+    url: response?.url,
+    prompt: prompt,
+  };
 };
   
 
