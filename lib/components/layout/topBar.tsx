@@ -131,8 +131,8 @@ export const TopBarInner = () => {
       
       {isAuth ? (
         <>
-          <a href="/chat"><div className="p-2">Chatbot</div></a>
-          <a className="p-2" href="/imagen">ImaGen</a>
+          {/* <a href="/chat"><div className="p-2">Chatbot</div></a>
+          <a className="p-2" href="/imagen">ImaGen</a> */}
           <a className="p-2" href="/usweather">US Weather</a>
           <a className="p-2" href="/babylonjs">3D Demo</a>
           <button className="p-2"

@@ -11,7 +11,7 @@ const Page = ({ session }: any) => {
   ) => {
     "use server";
     if (!messages) {
-      return new Response('Messages are required.', { status: 400 });
+      return { error: 'Messages are required.' };
     }
   
     const response = await OpenAI.createChatCompletion({ 
