@@ -7,8 +7,7 @@ const Page = ({ session }: any) => {
   "use server";
 
   const handleSubmit = async (
-    prompt: string, 
-    user: string, 
+    prompt: string, user: string, 
     size: CreateImageRequestSizeEnum = CreateImageRequestSizeEnum._512x512 
   ) => {
     "use server";
@@ -19,10 +18,7 @@ const Page = ({ session }: any) => {
   
     const response = await AiController.imagen({ prompt, user, size });
   
-    return {
-      url: response?.url,
-      prompt: prompt,
-    };
+    return response;
   };
     
   return (
