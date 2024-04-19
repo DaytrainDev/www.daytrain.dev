@@ -27,7 +27,7 @@ const ImagenUI = ({handleSubmit}: any) => {
       <h1 className="border-slate-100 border-2 border-dashed p-2">ImaGen</h1>
     </div>
       {imageUrl && <div>
-        <Image src={`${imageUrl}`} alt={`${promptRef.current?.value}`} width="1024" height="1024" />
+        <Image src={`${imageUrl}`} alt={`${promptRef.current?.value}`} width="512" height="512" />
       </div>}
       <div className="flex flex-row items-center border-2 border-solid p-2">
         <textarea className="bg-slate-800 border-2 border-solid p-2" 
