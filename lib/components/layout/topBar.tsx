@@ -30,69 +30,6 @@ const handleLogin = async (): Promise<void> => {
   signIn();
 };
 
-// const UserMenu = ({
-//   session,
-// }: {
-//   session: {
-//     update?: Function;
-//     data?: Session | null;
-//     status: "loading" | "authenticated" | "unauthenticated";
-//   } | null;
-//   className?: string;
-// }) => {
-//   const popupState = usePopupState({ variant: "popover", popupId: "userMenu" });
-//   const { isDark, toggleDark } = useDarkMode();
-//   const isAuth = useMemo(() => session?.status === "authenticated", [session?.status]);
-//   const user = useMemo(() => session?.data?.user, [session?.data?.user]);
-
-//   return (
-//     <div className={className}>
-//       <Button style={style} className={className} {...bindTrigger(popupState)}>
-//         {user?.image ? (
-//           <Image
-//             alt={`${user?.name}'s avatar`}
-//             width={48}
-//             height={48}
-//             src={user?.image}
-//           />
-//         ) : (
-//           '👤'
-//         )}
-//         {user?.name && <p className="p-2">{user?.name}</p>}
-//       </Button>
-//       <Menu {...bindMenu(popupState)}>
-//         {/* <MenuItem onClick={popupState.close}>Profile</MenuItem>
-//         <MenuItem onClick={popupState.close}>My Account</MenuItem> */}
-//         {/* <MenuItem
-//             onClick={toggleDark}
-//           >
-//             Use {isDark ? "Light" : "Dark"} Mode
-//           </MenuItem> */}
-//         {isAuth ? (
-//           <div>
-//             <MenuItem
-//               onClick={() => {
-//                 popupState.close();
-//                 handleLogout();
-//               }}
-//             >Logout</MenuItem>
-//           </div>
-//         ) : (
-//           <MenuItem
-//             onClick={() => {
-//               popupState.close();
-//               handleLogin();
-//             }}
-//           >
-//             Login
-//           </MenuItem>
-//         )}
-//       </Menu>
-//     </div>
-//   );
-// };
-
-// export const Menu = ({ user, url, setUrl }: MenuProps) => {
 export const TopBarInner = () => {
   const session = useSession();
   const { data, status, update } = session;
@@ -100,12 +37,6 @@ export const TopBarInner = () => {
   // const { isDark, toggleDark } = useDarkMode();
   const isAuth = useMemo(() => session?.status === "authenticated", [session?.status]);
   const user = useMemo(() => session?.data?.user, [session?.data?.user]);
-
-  // const urlRef = useRef({ value: url })
-
-  // const handleGo = async (): Promise<void> => {
-  //   setUrl(urlRef.current.value);
-  // };
 
   return !isLoading && (<div
       className={"w-full flex flex-row justify-items-end items-center p-0 m-0 top-0 right-0 absolute bg-gray-700"}
@@ -116,6 +47,7 @@ export const TopBarInner = () => {
       <div className="flex flex-row items-center ">
         {user?.image ? (
           <Image
+            priority
             alt={`${user?.name}'s avatar`}
             width={48}
             height={48}
@@ -131,18 +63,16 @@ export const TopBarInner = () => {
       
       {isAuth ? (
         <>
-          {/* <a href="/chat"><div className="p-2">Chatbot</div></a>
-          <a className="p-2" href="/imagen">ImaGen</a> */}
           <a className="p-2" href="/usweather">US Weather</a>
-          <a className="p-2" href="/babylonjs">3D Demo</a>
-          <button className="p-2"
+          <a className="p-2" href="/cowsay">Cowsay</a>
+          <button className="p-2 ml-auto"
             onClick={() => {
               handleLogout();
             }}
           >Logout</button>
         </>
         ) : (
-          <button className="p-2"
+          <button className="p-2 ml-auto"
             onClick={() => {
               handleLogin();
             }}
@@ -153,7 +83,7 @@ export const TopBarInner = () => {
     </div>);
 };
 
-export const TopBar = ({ session }: TopBarProps) => {
+export const TopBarSession = ({ session }: TopBarProps) => {
   return (
     <SessionProvider session={session}>
       <TopBarInner />

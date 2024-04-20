@@ -31,7 +31,7 @@ export default async function Home() {
         <h2 className="text-2xl font-bold text-center lg:text-6xl">
           WIP
         </h2>
-        <p>Stuff that &quot;totally works on my machine&quot;, but not live.</p>
+        <p>Stuff what don&apos;t work good.</p>
         <div className="flex flex-row items-center justify-center">
           {[
             {
@@ -43,6 +43,11 @@ export default async function Home() {
               title: "ImaGen",
               description: "Image Generation.",
               href: "/wip/imagen",
+            },
+            {
+              title: "3D Capsule Demo",
+              description: "WASD to move the Capsule.",
+              href: "/wip/babylonjs",
             },
           ].map(MapItem)}
         </div>

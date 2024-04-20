@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { Session } from "next-auth";
 
 import "./globals.css";
-import { TopBar } from "@/lib/components/layout/topBar";
+import { TopBarSession } from "@/lib/components/layout/topBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +16,7 @@ export default function RootLayout({ children, session }: any) {
   return (
     <html lang="en">
       <body className={`${inter.className} w-full`}>
-        <TopBar session={session} />
+        <TopBarSession session={session} />
         <div className="pt-12">
           {children}
         </div>

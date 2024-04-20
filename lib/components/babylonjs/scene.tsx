@@ -63,7 +63,8 @@ export const BabylonScene = (props : any) => {
         scene.dispose();
       }
     };
-  }, [reactCanvas]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reactCanvas, scene]);
 
   return (
     <canvas

@@ -1,5 +1,5 @@
 "use server";
-import { ImagenSession } from "@/lib/components/imagen";
+import { ImagenSession } from "@/lib/components/imaGen";
 import OpenAI from "@/lib/services/openai";
 import { CreateImageRequestSizeEnum } from "openai-edge";
 
