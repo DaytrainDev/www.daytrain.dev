@@ -31,7 +31,7 @@ interface GenericIOUISessionProps {
   output?: string;
 }
 
-export default function GenericIOUISession({ session, inputs, label, action, output } : GenericIOUISessionProps ) {
+export function GenericIOUISession({ session, inputs, label, action, output } : GenericIOUISessionProps ) {
 
   return (
       <SessionProvider session={session}>

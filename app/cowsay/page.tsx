@@ -1,4 +1,4 @@
-import GenericIOUISession from "@/lib/components/basicInput";
+ import { GenericIOUISession } from "@/lib/components/genericIOUI";
 import { say as cowsayCall } from "cowsay";
 
 export default function Page({ session, searchParams } : any ) {

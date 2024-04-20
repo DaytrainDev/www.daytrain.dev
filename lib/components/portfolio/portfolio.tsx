@@ -1,4 +1,4 @@
-import ContactForm from '../contactForm';
+import ContactForm from './portfolioContactForm';
 import SkillList from './portfolioSkillItemList';
 import PortfolioList from './portfolioProjectList';
 import AboutMeSection from './portfolioAboutMe';

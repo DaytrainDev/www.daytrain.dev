@@ -1,5 +1,5 @@
 "use server";
-import { ImagenSession } from "@/lib/components/imaGen";
+import { ImaGenSession } from "@/lib/components/imaGen";
 import OpenAI from "@/lib/services/openai";
 import { CreateImageRequestSizeEnum } from "openai-edge";
 
@@ -23,7 +23,7 @@ const handleSubmit = async (
 const Page = async ({ session }: any) => {
 
   return (
-    <ImagenSession session={session} handleSubmit={handleSubmit} />
+    <ImaGenSession session={session} handleSubmit={handleSubmit} />
   );
 }
 export default Page;
