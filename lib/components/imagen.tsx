@@ -1,7 +1,7 @@
 "use client";
 import { SessionProvider, useSession } from "next-auth/react";
 import Image from 'next/image'
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const ImagenUI = ({handleSubmit}: any) => {
   const session = useSession();
