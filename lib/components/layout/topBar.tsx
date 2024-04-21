@@ -64,6 +64,8 @@ export const TopBarInner = () => {
       {isAuth ? (
         <>
           <a className="p-2" href="/usweather">US Weather</a>
+          <a className="p-2" href="/imagen">ImaGen</a>
+          <a className="p-2" href="/chat">ChatBot</a>
           <a className="p-2" href="/cowsay">Cowsay</a>
           <button className="p-2 ml-auto"
             onClick={() => {
