@@ -1,23 +1,23 @@
 "use server";
 import { ImaGenSession } from "@/lib/components/imaGen";
 import OpenAI from "@/lib/services/openai";
-import { CreateImageRequestSizeEnum } from "openai-edge";
 
 const handleSubmit = async (
-  prompt: string, user: string, n?: number,
-  size: CreateImageRequestSizeEnum = CreateImageRequestSizeEnum._512x512 
+  prompt: string, 
+  user: string,
+  size?: "512x512" | "256x256" | "1024x1024", 
+  n?: number
 ) => {
   "use server";
-  const response = await OpenAI.createImage({
+  const response = await OpenAI.images.generate({
     prompt: prompt,
     n: n ?? 1,
-    size: size ?? CreateImageRequestSizeEnum._512x512,
+    size: size ?? '512x512',
     user: user,
     // response_format?: CreateImageRequestResponseFormatEnum;
   });
-  const responseData = await response.json();
 
-  return responseData?.data[0];
+  return response?.data[0];
 };
 
 const Page = async ({ session }: any) => {

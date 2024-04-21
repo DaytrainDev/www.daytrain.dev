@@ -1,14 +1,13 @@
-import {
-  OpenAIStream as _OpenAIStream,
-  StreamingTextResponse as _StreamingTextResponse,
-} from "ai";
-import { Configuration, OpenAIApi } from "openai-edge";
+// import {
+//   OpenAIStream as _OpenAIStream,
+//   StreamingTextResponse as _StreamingTextResponse,
+// } from "ai";
+import OpenAI from "openai";
 import aiConfig from "../config/ai";
 // https://vercel.com/blog/introducing-the-vercel-ai-sdk
 
-const OpenAI = new OpenAIApi(new Configuration(aiConfig.openai));
+const openAI = new OpenAI(aiConfig.openai);
 
-export const runtime = "edge";
-export const OpenAiStream = _OpenAIStream;
-export const StreamingTextResponse = _StreamingTextResponse;
-export default OpenAI;
+// export const OpenAiStream = _OpenAIStream;
+// export const StreamingTextResponse = _StreamingTextResponse;
+export default openAI;
