@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Session } from "next-auth";
+import { Session, getServerSession } from "next-auth";
 
 import "./globals.css";
 import { TopBarSession } from "@/lib/components/layout/topBar";
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
   description: "Stuff I build for me to have stuff I've built.",
 };
 
-export default function RootLayout({ children, session }: any) {
+export default async function RootLayout({ children }: any) {
+  const session = await getServerSession();
+
   return (
     <html lang="en">
       <body className={`${inter.className} w-full`}>

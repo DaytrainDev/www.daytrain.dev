@@ -15,12 +15,8 @@ import { Session } from "next-auth";
 // import { useRef } from "react";
 
 interface TopBarProps {
-  session: Session;
+  session: Session | null;
 }
-
-const className =
-  "cursor-pointer bg-transparent transition-colors duration-300 border-none  decoration-none text-primary-500 hover:bg-primary-600 hover:text-white font-light centered !outline-none text-3xl";
-const style = { padding: 0, margin: 0 , minWidth: "48px", minHeight: "48px" };
 
 const handleLogout = async (): Promise<void> => {
   signOut({ callbackUrl: "/" });
@@ -32,8 +28,7 @@ const handleLogin = async (): Promise<void> => {
 
 export const TopBarInner = () => {
   const session = useSession();
-  const { data, status, update } = session;
-  const isLoading = useMemo(() => status === "loading", [status]);
+  const isLoading = useMemo(() => session?.status === "loading", [session?.status]);
   // const { isDark, toggleDark } = useDarkMode();
   const isAuth = useMemo(() => session?.status === "authenticated", [session?.status]);
   const user = useMemo(() => session?.data?.user, [session?.data?.user]);
@@ -88,7 +83,7 @@ export const TopBarInner = () => {
 export const TopBarSession = ({ session }: TopBarProps) => {
   return (
     <SessionProvider session={session}>
-      <TopBarInner />
+      {session && <TopBarInner />}
     </SessionProvider>
   );
 };

@@ -1,11 +1,11 @@
 'use client';
 // import useDebounce from '@/lib/hooks/useDebounce';
 import Image from 'next/image'
-import { useCallback, useEffect, useState } from 'react';
-
-import './weather.css'
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Geolocation } from '@/lib/services/geocode';
 import { debounce } from '@mui/material';
 import { SessionProvider, useSession } from 'next-auth/react';
+import './weather.css'
 
 const constants = {
   "days": ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
@@ -47,50 +47,56 @@ const forecastItem = (item: any) => {
   )
 }
 
-function WeatherUI({ handleSubmit }: any) {
-  const [searchText, setSearchText] = useState('');
+function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>) {
+  const session = useSession();
+  const searchRef = useRef(null as any);
+  const [forecast, setForecast]: any = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
-  const [searchResultData, setSearchResultData]: any = useState(null);
-  const session = useSession();
 
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateData = useCallback(
-    debounce(async (incSearchText: string) => {
+  const handleSearch = useCallback(
+    debounce(async () => {
+      const incSearchText = searchRef.current.value;
       if (!incSearchText || incSearchText.length < 2) return;
+      const newGeoCode = await handleGeoSearch(searchRef.current.value);
+      updateWeather(newGeoCode);
+    }, 1250),
+    []
+  );
+
+  const updateWeather = useCallback(
+    debounce(async (incGeoCode: Geolocation) => {
       setLoading(true);
-
-      const data = await handleSubmit(incSearchText);
-
-      if (data?.error) {
-        setErrorMsg(data.error);
-      } else if (data) {
+      const newForecast = await handleWeatherSearch(incGeoCode).catch(() => {
+        setErrorMsg('Could not update forecast. Please try again.');
+      });
+      if (newForecast?.error) {
+        setErrorMsg(newForecast.error);
+      } else if (newForecast) {
+        setForecast(newForecast);
         setErrorMsg('');
-        setSearchResultData(data);
       }
-
       setLoading(false);
     }, 1250),
     []
   );
 
   useEffect(() => {
-    const defaultSearchText = '66044';
-    setSearchText(defaultSearchText),
-    updateData(defaultSearchText);
-  }, [updateData]);
-  
-  async function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
-    setSearchText(e.target.value);
-    updateData(e.target.value);
-  }
+    if('geolocation' in navigator) {
+      // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
+      navigator.geolocation.getCurrentPosition(({ coords }) => {
+        updateWeather({ latitude: coords.latitude, longitude: coords.longitude } as Geolocation);
+      });
+    }
+  }, []);
 
-  const location = searchResultData?.location ? `${searchResultData?.location?.city}, ${searchResultData?.location?.state}` : '';
-  const timeObj = searchResultData?.forecast?.updateTime && new Date(searchResultData?.forecast?.updateTime);
+  const location = forecast?.location ? `${forecast?.location?.city}, ${forecast?.location?.state}` : '';
+  const timeObj = forecast?.forecast?.updateTime && new Date(forecast?.forecast?.updateTime);
   const time = timeObj && `updated ${timeObj.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`;
-  const today = searchResultData?.forecast?.periods[0];
-  const dailyForecast = searchResultData?.forecast?.periods.slice(1);
+  const today = forecast?.forecast?.periods[0];
+  const extendedForecast = forecast?.forecast?.periods.slice(1);
   // TODO: group day and night forecasts
 
   return (
@@ -111,7 +117,13 @@ function WeatherUI({ handleSubmit }: any) {
           US Weather
         </div>
         <div className="control-wrapper">
-          <input className="control text-slate-800" value={searchText} onChange={handleSearchInput} type="text" placeholder="Enter Zipcode, City, or State" />
+          <input 
+            ref={searchRef}
+            onChange={handleSearch}
+            className="control text-slate-800"
+            type="text" 
+            placeholder="Enter Location..." 
+          />
         </div>
       </div>
       <div className={loading ? 'content' : 'hidden'}> 
@@ -138,10 +150,6 @@ function WeatherUI({ handleSubmit }: any) {
             <div className="short-forecast">{today?.shortForecast}</div>
             <div className="update-time">{time}</div>
           </div>
-          {/* <div>
-            <div>{tonight}</div>
-          </div>
-          <pre>{JSON.stringify(dailyForecast, null, 2)}</pre> */}
         </div>
         <div className="detail-forecast">{today?.detailedForecast}</div>
         <hr/>
@@ -149,18 +157,21 @@ function WeatherUI({ handleSubmit }: any) {
           Extended Forecast
         </div>
         <div className="daily-forecast-content"> 
-          {dailyForecast?.map(forecastItem)}
+          {extendedForecast?.map(forecastItem)}
         </div>
       </div>
     </main>
   ));
 }
 
-export const WeatherSession = ({ session, handleSubmit }: any) => {
+export const WeatherSession = ({ session, handleGeoSearch, handleWeatherSearch }: any) => {
 
   return (
     <SessionProvider session={session}>
-      <WeatherUI handleSubmit={handleSubmit}/>
+      {session && <WeatherUI
+        handleGeoSearch={handleGeoSearch} 
+        handleWeatherSearch={handleWeatherSearch}
+      />}
     </SessionProvider>
   );
 }
