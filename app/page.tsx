@@ -12,12 +12,9 @@ const MapItem = (item: any, index: number) => {
         rel="noopener noreferrer"
       >
         <h2 className={`mb-3 text-2xl font-semibold`}>
-          {item.title}{" "}
-          <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-            -&gt;
-          </span>
+          {item.title}
         </h2>
-        <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+        <p className={`m-0 max-w-[30ch] text-sm`}>
           {item.description}
         </p>
       </a>
@@ -46,22 +43,25 @@ export default async function Home() {
               title: "US Weather",
               description: "See the weather.",
               href: "/usweather",
-              target: "_blank",
             },
             {
-              title: "GitHub",
-              description: "See code.",
-              href: "https://github.com/DaytrainDev",
-              target: "_blank",
+              title: "ImaGen",
+              description: "Generate image.",
+              href: "/imagen",
             },
           ].map(MapItem)}
         </div>
         <div className="flex flex-row items-center justify-center">
           {[
             {
-              title: !session ? "Login" : "Logout",
-              description: !session ? "Use apps." : "Done here.",
-              href: !session ? "/api/auth/signin" : "/api/auth/signout",
+              title: "Chat",
+              description: "Talk to bot.",
+              href: "/chatbot",
+            },
+            {
+              title: "Cowsay",
+              description: "Say as cow.",
+              href: "/cowsay",
             },
             {
               title: "Crit-Fumble",
@@ -69,40 +69,28 @@ export default async function Home() {
               href: "https://www.crit-fumble.com",
               target: "_blank",
             },
+          ].map(MapItem)}
+        </div>
+        <div className="flex flex-row items-center justify-center">
+          {[
             {
               title: "GitHub",
               description: "See code.",
               href: "https://github.com/DaytrainDev",
               target: "_blank",
             },
-          ].map(MapItem)}
-        </div>
-        <div className="flex flex-row items-center justify-center">
-          {[
             {
               title: "Discord",
               description: "Say hi.",
               href: "https://discord.gg/jmUjBskedy",
               target: "_blank",
             },
-            // {
-            //   title: "Twitch",
-            //   description: "Watch stream.",
-            //   href: "https://www.twitch.tv/daytraindev",
-            //   target: "_blank",
-            // },
             {
               title: "Patreon",
               description: "Give money.",
               href: "https://www.patreon.com/DaytrainDev",
               target: "_blank",
             },
-            // {
-            //   title: "Keyhole Software",
-            //   description: "Hire devs.",
-            //   href: "https://https://keyholesoftware.com/services",
-            //   target: "_blank",
-            // },
           ].map(MapItem)}
         </div>
       </div>

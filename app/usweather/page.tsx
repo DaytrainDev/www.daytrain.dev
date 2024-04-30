@@ -16,7 +16,7 @@ const handleWeatherSearch = async (geocode: Geolocation) => {
 };
 
 const Page = async () => {
-  const session = getServerSession();
+  const session = await getServerSession();
 
   return (
     <WeatherSession 

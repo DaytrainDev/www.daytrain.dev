@@ -40,7 +40,7 @@ export const TopBarInner = () => {
        */}
 
       <div className="flex flex-row items-center ">
-        {user?.image ? (
+        {user?.image && (
           <Image
             priority
             alt={`${user?.name}'s avatar`}
@@ -48,16 +48,13 @@ export const TopBarInner = () => {
             height={48}
             src={user?.image}
           />
-        ) : (
-          '👤'
         )}
-        {user?.name && <p className="p-2">{user?.name}</p>}
+        {user?.name && <p className="p-2">{user?.name} |</p>}
       </div>
-      <div className="p-2">|</div>
-      <a href="/"><button className="p-2">Home</button></a>
       
       {isAuth ? (
         <>
+          <a href="/"><button className="p-2">Home</button></a>
           <a className="p-2" href="/usweather">US Weather</a>
           <a className="p-2" href="/imagen">ImaGen</a>
           <a className="p-2" href="/chat">ChatBot</a>
@@ -83,7 +80,7 @@ export const TopBarInner = () => {
 export const TopBarSession = ({ session }: TopBarProps) => {
   return (
     <SessionProvider session={session}>
-      {session && <TopBarInner />}
+      <TopBarInner />
     </SessionProvider>
   );
 };

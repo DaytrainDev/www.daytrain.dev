@@ -60,6 +60,10 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
       const incSearchText = searchRef.current.value;
       if (!incSearchText || incSearchText.length < 2) return;
       const newGeoCode = await handleGeoSearch(incSearchText);
+      if (newGeoCode?.error) {
+        setErrorMsg(newGeoCode.error);
+        return;
+      }
       await updateWeather(newGeoCode);
     }, 1250),
     []
@@ -69,12 +73,14 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
   const updateWeather = useCallback(
     debounce(async (incGeoCode: Geolocation) => {
       setLoading(true);
-      await session.update({ 
-        user: { geolocation: incGeoCode },
-        // store: { 
-        //   weatherSearch: searchRef.current.value,
-        // } 
-      });
+      // if (session?.data?.user) {
+      //   session.data.user.geolocation = incGeoCode;
+      //   if (!session.data.user.store) {
+      //     session.data.user.store = {};
+      //   }
+      //   session.data.user.store.weatherSearch = searchRef.current.value;
+      //   await session.update();
+      // }
       const newForecast = await handleWeatherSearch(incGeoCode).catch(() => {
         setErrorMsg('Could not update forecast. Please try again.');
       });
@@ -82,27 +88,25 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
         setErrorMsg(newForecast.error);
       } else if (newForecast) {
         setForecast(newForecast);
+        // searchRef.current.value = session?.data?.user?.store?.weatherSearch;
       }
-      console.log('session.data.user.geolocation', session?.data?.user.geolocation);
       setLoading(false);
     }, 1250),
     []
   );
 
   useEffect(() => {
-    if (session?.data?.user?.geolocation) {
-      console.log('session.data.user.geolocation', session.data.user.geolocation);
-      updateWeather(session.data.user.geolocation as Geolocation);
-    }
-    // if (session?.data?.user?.store?.weatherSearch) {
-    //   searchRef.current.value = session.data.user.store.weatherSearch;
-    // }
-    // if('geolocation' in navigator) {
-    //   // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
-    //   navigator.geolocation.getCurrentPosition(({ coords }) => {
-    //     updateWeather({ latitude: coords.latitude, longitude: coords.longitude } as Geolocation);
-    //   });
-    // }
+    // console.log('session?.data?.user', session?.data?.user);
+    // if (session?.data?.user?.geolocation) {
+    //   searchRef.current.value = session?.data?.user?.store?.weatherSearch;
+    //   updateWeather(session.data.user.geolocation as Geolocation);
+    // } else 
+    if('geolocation' in navigator) {
+      // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
+      navigator.geolocation.getCurrentPosition(({ coords }) => {
+        updateWeather({ latitude: coords.latitude, longitude: coords.longitude } as Geolocation);
+      });
+    } 
   }, []);
 
   const location = forecast?.location ? `${forecast?.location?.city}, ${forecast?.location?.state}` : '';

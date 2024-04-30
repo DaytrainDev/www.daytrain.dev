@@ -8,10 +8,12 @@ function GenericIOUI({ inputs, label, action, output }: any) {
   return (
     <div>
       <form className="flex flex-col items-center p-2" action={action} method="GET">
-        {inputs.map((input: any, idx: number) => (<>
-          <label htmlFor={input?.id ?? `field_${idx}`} className="text-lg font-bold mb-2">{input.prompt}</label>
-          <input type="text" id={input?.id ?? `field_${idx}`} name={input.name} className="border border-gray-300 rounded-md p-2 bg-transparent" />
-        </>))}
+        {inputs.map((input: any, idx: number) => (
+          <div key={`moo_${idx}`} className="flex flex-col items-center">
+            <label htmlFor={input?.id ?? `field_${idx}`} className="text-lg font-bold mb-2">{input.prompt}</label>
+            <input type="text" id={input?.id ?? `field_${idx}`} name={input.name} className="border border-gray-300 rounded-md p-2 bg-transparent" />
+          </div>
+        ))}
         
         <button type="submit" className="bg-transparent p-3">{label}</button>
       </form>

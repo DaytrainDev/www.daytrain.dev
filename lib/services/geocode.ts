@@ -6,7 +6,7 @@ export const search = async (searchText: string) => {
   const { latt, longt } = await geocodeResponse.json();
 
   if (!isNaN(latt) && !isNaN(longt)) {
-    return { latitude: latt as number, longitude: longt as number } as Geolocation;
+    return { latitude: parseFloat(latt), longitude: parseFloat(longt) } as Geolocation;
   }
 
   return { error: 'Geocode for Location not Found' } as Geolocation;
