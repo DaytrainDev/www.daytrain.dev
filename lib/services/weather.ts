@@ -1,5 +1,5 @@
 "use server";
-import { Geolocation } from './geocode';
+import { Geolocation } from '../types/daytrain';
 
 const parseGeo = (geo: number) => `${Math.round(geo * 100) / 100}`
 

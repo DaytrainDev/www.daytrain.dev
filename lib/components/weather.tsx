@@ -53,22 +53,6 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleSearch = useCallback(
-    debounce(async () => {
-      const incSearchText = searchRef.current.value;
-      if (!incSearchText || incSearchText.length < 2) return;
-      const newGeoCode = await handleGeoSearch(incSearchText);
-      if (newGeoCode?.error) {
-        setErrorMsg(newGeoCode.error);
-        return;
-      }
-      await updateWeather(newGeoCode);
-    }, 1250),
-    []
-  );
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateWeather = useCallback(
     debounce(async (incGeoCode: Geolocation) => {
@@ -95,6 +79,21 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
     []
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleSearch = useCallback(
+    debounce(async () => {
+      const incSearchText = searchRef.current.value;
+      if (!incSearchText || incSearchText.length < 2) return;
+      const newGeoCode = await handleGeoSearch(incSearchText);
+      if (newGeoCode?.error) {
+        setErrorMsg(newGeoCode.error);
+        return;
+      }
+      await updateWeather(newGeoCode);
+    }, 1250),
+    [updateWeather]
+  );
+  
   useEffect(() => {
     // console.log('session?.data?.user', session?.data?.user);
     // if (session?.data?.user?.geolocation) {
