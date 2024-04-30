@@ -1,6 +1,7 @@
 "use server";
 import { ImaGenSession } from "@/lib/components/imaGen";
 import OpenAI from "@/lib/services/openai";
+import { getServerSession } from "next-auth";
 
 const handleSubmit = async (
   prompt: string, 
@@ -20,7 +21,8 @@ const handleSubmit = async (
   return response?.data[0];
 };
 
-const Page = async ({ session }: any) => {
+const Page = async () => {
+  const session = await getServerSession();
 
   return (
     <ImaGenSession session={session} handleSubmit={handleSubmit} />

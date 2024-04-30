@@ -56,7 +56,7 @@ export default async function Home() {
             {
               title: "Chat",
               description: "Talk to bot.",
-              href: "/chatbot",
+              href: "/chat",
             },
             {
               title: "Cowsay",

@@ -1,6 +1,7 @@
 "use server";
 import { ChatSession } from "@/lib/components/chat";
 import OpenAI from "@/lib/services/openai";
+import { getServerSession } from "next-auth";
 
 const handleSubmit = async (
   messages: any[], user: string
@@ -18,7 +19,8 @@ const handleSubmit = async (
   return response?.choices[0]?.message;
 };
 
-const Page = async ({ session }: any) => {
+const Page = async () => {
+  const session = await getServerSession();
 
   return (
     <ChatSession session={session} handleSubmit={handleSubmit} />
