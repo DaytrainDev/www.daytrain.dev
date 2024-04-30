@@ -1,7 +1,8 @@
 "use server";
 import { WeatherSession } from "@/lib/components/weather";
 import { search as weatherSearch} from "@/lib/services/weather";
-import { search as geoSearch, Geolocation } from "@/lib/services/geocode";
+import { search as geoSearch } from "@/lib/services/geocode";
+import { Geolocation } from "@/lib/types/daytrain";
 import { getServerSession } from "next-auth";
 
 const handleGeoSearch = async (incSearchText: string) => {

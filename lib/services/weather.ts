@@ -4,9 +4,7 @@ import { Geolocation } from './geocode';
 const parseGeo = (geo: number) => `${Math.round(geo * 100) / 100}`
 
 export const search = async (geocode: Geolocation) => {
-  console.log(geocode);
   const gridpointResponse = await fetch(`https://api.weather.gov/points/${parseGeo(geocode.latitude)},${parseGeo(geocode.longitude)}`);
-
   const parsedGridpointResponse = await gridpointResponse.json();
   if (!parsedGridpointResponse?.properties) return { error: 'Gridpoint Server could not be reached' };
 

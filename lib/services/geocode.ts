@@ -1,10 +1,5 @@
 "use server";
-
-export type Geolocation = {
-  latitude: number;
-  longitude: number;
-  error?: string;
-}
+import { Geolocation } from "../types/daytrain";
 
 export const search = async (searchText: string) => {
   const geocodeResponse = await fetch(`https://geocode.xyz/${encodeURIComponent(searchText)}?region='US'&json=1`);

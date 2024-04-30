@@ -1,10 +1,9 @@
 'use client';
-// import useDebounce from '@/lib/hooks/useDebounce';
-import Image from 'next/image'
+import Image from 'next/image';
+import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Geolocation } from '@/lib/services/geocode';
-import { debounce } from '@mui/material';
 import { SessionProvider, useSession } from 'next-auth/react';
+import { Geolocation } from '../types/daytrain'
 import './weather.css'
 
 const constants = {
@@ -60,15 +59,22 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
     debounce(async () => {
       const incSearchText = searchRef.current.value;
       if (!incSearchText || incSearchText.length < 2) return;
-      const newGeoCode = await handleGeoSearch(searchRef.current.value);
-      updateWeather(newGeoCode);
+      const newGeoCode = await handleGeoSearch(incSearchText);
+      await updateWeather(newGeoCode);
     }, 1250),
     []
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateWeather = useCallback(
     debounce(async (incGeoCode: Geolocation) => {
       setLoading(true);
+      await session.update({ 
+        user: { geolocation: incGeoCode },
+        // store: { 
+        //   weatherSearch: searchRef.current.value,
+        // } 
+      });
       const newForecast = await handleWeatherSearch(incGeoCode).catch(() => {
         setErrorMsg('Could not update forecast. Please try again.');
       });
@@ -76,20 +82,27 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
         setErrorMsg(newForecast.error);
       } else if (newForecast) {
         setForecast(newForecast);
-        setErrorMsg('');
       }
+      console.log('session.data.user.geolocation', session?.data?.user.geolocation);
       setLoading(false);
     }, 1250),
     []
   );
 
   useEffect(() => {
-    if('geolocation' in navigator) {
-      // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
-      navigator.geolocation.getCurrentPosition(({ coords }) => {
-        updateWeather({ latitude: coords.latitude, longitude: coords.longitude } as Geolocation);
-      });
+    if (session?.data?.user?.geolocation) {
+      console.log('session.data.user.geolocation', session.data.user.geolocation);
+      updateWeather(session.data.user.geolocation as Geolocation);
     }
+    // if (session?.data?.user?.store?.weatherSearch) {
+    //   searchRef.current.value = session.data.user.store.weatherSearch;
+    // }
+    // if('geolocation' in navigator) {
+    //   // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
+    //   navigator.geolocation.getCurrentPosition(({ coords }) => {
+    //     updateWeather({ latitude: coords.latitude, longitude: coords.longitude } as Geolocation);
+    //   });
+    // }
   }, []);
 
   const location = forecast?.location ? `${forecast?.location?.city}, ${forecast?.location?.state}` : '';
@@ -101,7 +114,7 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
 
   return (
     (session.status === 'loading')
-    ? (<div>Loading...</div>)
+    ? (<div className={`${session.status === 'loading' ? '' : 'hidden'}`}>Loading...</div>)
     : !(session.status === 'authenticated')
     ? (<>
         <div>You need to be logged in to weather.</div>
@@ -119,6 +132,7 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
         <div className="control-wrapper">
           <input 
             ref={searchRef}
+            defaultValue={session?.data?.user?.store?.weatherSearch ?? ''}
             onChange={handleSearch}
             className="control text-slate-800"
             type="text" 

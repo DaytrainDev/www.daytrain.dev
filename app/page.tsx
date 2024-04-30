@@ -43,6 +43,27 @@ export default async function Home() {
               href: !session ? "/api/auth/signin" : "/api/auth/signout",
             },
             {
+              title: "US Weather",
+              description: "See the weather.",
+              href: "/usweather",
+              target: "_blank",
+            },
+            {
+              title: "GitHub",
+              description: "See code.",
+              href: "https://github.com/DaytrainDev",
+              target: "_blank",
+            },
+          ].map(MapItem)}
+        </div>
+        <div className="flex flex-row items-center justify-center">
+          {[
+            {
+              title: !session ? "Login" : "Logout",
+              description: !session ? "Use apps." : "Done here.",
+              href: !session ? "/api/auth/signin" : "/api/auth/signout",
+            },
+            {
               title: "Crit-Fumble",
               description: "Pretend with dice.",
               href: "https://www.crit-fumble.com",

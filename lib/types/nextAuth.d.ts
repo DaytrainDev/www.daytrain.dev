@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import { DiscordProfile } from "next-auth/providers/discord"
+import { Geolocation } from ""
 
 declare module "next-auth" {
   /**
@@ -11,7 +12,9 @@ declare module "next-auth" {
         name: string,
         image?: string,
         email?: string,
+        geolocation?: Geolocation,
         discord?: DiscordProfile,
+        store?: Record<string, any>,
     }
   }
 }
