@@ -1,11 +1,16 @@
 import DiscordProvider from "next-auth/providers/discord";
+import GithubProvider from "next-auth/providers/github";
 
 const config = { 
     providers: [ 
-        DiscordProvider({
-            clientId: process.env.AUTH_DISCORD_ID ?? '',
-            clientSecret: process.env.AUTH_DISCORD_SECRET ?? '',
-        }),
+      GithubProvider({
+        clientId: process.env.AUTH_GITHUB_ID ?? '',
+        clientSecret: process.env.AUTH_GITHUB_SECRET ?? '',
+      }),
+      DiscordProvider({
+          clientId: process.env.AUTH_DISCORD_ID ?? '',
+          clientSecret: process.env.AUTH_DISCORD_SECRET ?? '',
+      }),
     ],
   callbacks: {
     session({ session, token, user } : any) {
