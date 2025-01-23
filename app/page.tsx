@@ -40,57 +40,17 @@ export default async function Home() {
               href: !session ? "/api/auth/signin" : "/api/auth/signout",
             },
             {
-              title: "US Weather",
-              description: "See the weather.",
-              href: "/usweather",
-            },
-            {
-              title: "ImaGen",
-              description: "Generate image.",
-              href: "/imagen",
-            },
-          ].map(MapItem)}
-        </div>
-        <div className="flex flex-row items-center justify-center">
-          {[
-            {
-              title: "Chat",
-              description: "Talk to bot.",
-              href: "/chat",
-            },
-            {
-              title: "Cowsay",
-              description: "Say as cow.",
-              href: "/cowsay",
-            },
-            {
-              title: "Crit-Fumble",
-              description: "Pretend with dice.",
-              href: "https://www.crit-fumble.com",
-              target: "_blank",
-            },
-          ].map(MapItem)}
-        </div>
-        <div className="flex flex-row items-center justify-center">
-          {[
-            {
               title: "GitHub",
               description: "See code.",
-              href: "https://github.com/DaytrainDev",
+              href: "https://github.com/DaytrainDev/www.daytrain.dev",
               target: "_blank",
             },
-            {
-              title: "Discord",
-              description: "Say hi.",
-              href: "https://discord.gg/jmUjBskedy",
-              target: "_blank",
-            },
-            {
-              title: "Patreon",
-              description: "Give money.",
-              href: "https://www.patreon.com/DaytrainDev",
-              target: "_blank",
-            },
+            // {
+            //   title: "Patreon",
+            //   description: "Give money.",
+            //   href: "https://www.patreon.com/DaytrainDev",
+            //   target: "_blank",
+            // },
           ].map(MapItem)}
         </div>
       </div>

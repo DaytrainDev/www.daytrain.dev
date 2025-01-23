@@ -15,7 +15,7 @@ const nextConfig = {
         {
           protocol: 'https',
           hostname: 'oaidalleapiprodscus.blob.core.windows.net',
-          pathname: '/private/org-qqOGIeRRVKgfFxswMoBrv9cy/*/**',
+          pathname: '/private/org-djnhZ27nxPWLXgV3zLELh19w/*/**',
         }
       ]
   }

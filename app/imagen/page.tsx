@@ -18,6 +18,8 @@ const handleSubmit = async (
     // response_format?: CreateImageRequestResponseFormatEnum;
   });
 
+  console.log(response);
+
   return response?.data[0];
 };
 
