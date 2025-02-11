@@ -1,4 +1,3 @@
-import Image from "next/image";
 import authConfig from "@/lib/config/auth";
 import { getServerSession } from "next-auth";
 
