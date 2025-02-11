@@ -1,4 +1,4 @@
-import { GenericIOUISession } from "@/lib/components/genericIOUI";
+import { GenericIOUISession } from "@/lib/components/views/genericIOUI";
 import { say as cowsayCall } from "cowsay";
 import { getServerSession } from "next-auth";
 

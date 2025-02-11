@@ -3,7 +3,7 @@
 import { SessionProvider, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 
-const ChatUI = ({ handleSubmit }: any) => {
+export const ChatUI = ({ handleSubmit }: any) => {
   const session = useSession();
 
   // Rest of the code

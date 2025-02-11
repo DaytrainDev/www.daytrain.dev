@@ -1,5 +1,5 @@
 "use server";
-import { ChatSession } from "@/lib/components/chat";
+import { ChatSession } from "@/lib/components/views/chat";
 import OpenAI from "@/lib/services/openai";
 import { getServerSession } from "next-auth";
 

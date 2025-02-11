@@ -1,5 +1,5 @@
 "use server";
-import { ImaGenSession } from "@/lib/components/imaGen";
+import { ImaGenSession } from "@/lib/components/views/imaGen";
 import OpenAI from "@/lib/services/openai";
 import { getServerSession } from "next-auth";
 

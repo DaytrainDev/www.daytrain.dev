@@ -1,16 +1,7 @@
 "use client";
-import Button from "@mui/material/Button";
 import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import {
-  usePopupState,
-  bindTrigger,
-  bindMenu,
-} from "material-ui-popup-state/hooks";
-// import { Input, MenuItem } from "@mui/material";
-import useDarkMode from "@/lib/hooks/useDarkMode";
-import { use, useMemo, useState } from "react";
-import { Menu, MenuItem } from "@mui/material";
+import { useMemo } from "react";
 import { Session } from "next-auth";
 // import { useRef } from "react";
 
@@ -29,16 +20,12 @@ const handleLogin = async (): Promise<void> => {
 export const TopBarInner = () => {
   const session = useSession();
   const isLoading = useMemo(() => session?.status === "loading", [session?.status]);
-  // const { isDark, toggleDark } = useDarkMode();
   const isAuth = useMemo(() => session?.status === "authenticated", [session?.status]);
   const user = useMemo(() => session?.data?.user, [session?.data?.user]);
 
   return !isLoading && (<div
       className={"w-full flex flex-row justify-items-end items-center p-0 m-0 top-0 right-0 absolute bg-gray-700"}
     >
-      {/* <UserMenu className={''} session={{ data, status, update }} />
-       */}
-
       <div className="flex flex-row items-center ">
         {user?.image && (
           <Image

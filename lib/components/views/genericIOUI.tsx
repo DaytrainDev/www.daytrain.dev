@@ -2,7 +2,7 @@
 import { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 
-function GenericIOUI({ inputs, label, action, output }: any) {
+export function GenericIOUI({ inputs, label, action, output }: any) {
   const session = useSession();
 
   return (
@@ -21,6 +21,7 @@ function GenericIOUI({ inputs, label, action, output }: any) {
     </div>
   );
 }
+
 interface GenericIOUISessionProps { 
   session: Session; 
   inputs: [{

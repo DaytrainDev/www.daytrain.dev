@@ -3,9 +3,10 @@ import Image from 'next/image';
 import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { SessionProvider, useSession } from 'next-auth/react';
-import { Geolocation } from '../types/daytrain'
+// TODO: make this css a module
 import './weather.css'
 
+// TODO: refactor helper methods from view
 const constants = {
   "days": ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
 };
@@ -46,7 +47,7 @@ const forecastItem = (item: any) => {
   )
 }
 
-function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>) {
+export function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>) {
   const session = useSession();
   const searchRef = useRef(null as any);
   const [forecast, setForecast]: any = useState(null);

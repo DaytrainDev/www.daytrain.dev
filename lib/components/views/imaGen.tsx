@@ -3,7 +3,7 @@ import { SessionProvider, useSession } from "next-auth/react";
 import Image from 'next/image'
 import { useRef, useState } from "react";
 
-const ImaGenUI = ({handleSubmit}: any) => {
+export const ImaGenUI = ({handleSubmit}: any) => {
   const session = useSession();
   const [ imageUrl, setImageUrl ] = useState('');
   const promptRef = useRef(null as any);

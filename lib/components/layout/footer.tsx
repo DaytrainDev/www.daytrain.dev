@@ -1,5 +1,4 @@
 import Image from "next/image";
-import DarkModeToggle from "./darkModeToggle";
 
 export default function Footer() {
   const linkClass = 'p-2';
@@ -8,40 +7,18 @@ export default function Footer() {
     <footer className="flex-col justify-center w-full pb-4">
       <nav className="flex mt-6 justify-center w-full text-xl" dir="utd">
         <div className={linkClass}>
-          <a rel="noopener noreferrer" href={'https://github.com/DaytrainDev'} target="_blank">
+          <a rel="noopener noreferrer" href={'https://github.com/DaytrainDev/www.daytrain.dev'} target="_blank">
             <Image
-              src={"/img/github.png"}
-              alt={'Follow us on GitHub'}
-              width={128}
+              src={"/github.png"}
+              alt={'See source code on GitHub'}
+              width={51}
               height={51}
             />
           </a>
         </div>
-        <div className={linkClass}>
-          <a rel="noopener noreferrer" href={'https://www.patreon.com/DaytrainDev'} target="_blank">
-            <Image
-              src={"/img/patreon.avif"}
-              alt={'Support us on Patreon'}
-              width={213}
-              height={50}
-            />
-          </a>
-        </div>
-        <div className={linkClass}>
-          <a rel="noopener noreferrer" href={'https://discord.gg/jmUjBskedy'} target="_blank">
-            <Image
-              src={"/img/discord.avif"}
-              alt={'Join our Discord Server'}
-              width={155}
-              height={50}
-            />
-          </a>
-        </div>
-        
       </nav>
       <div className={'text-center'}>
-        {/* <DarkModeToggle /> */}
-        <p>© {new Date().getFullYear()}, Playitec, LLC</p>
+        <p className="text-black dark:text-white">© {new Date().getFullYear()}, Daytrain Dev</p>
       </div>
     </footer>
   )
