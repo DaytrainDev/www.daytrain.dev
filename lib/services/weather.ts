@@ -3,7 +3,11 @@ import { Geolocation } from '../types/daytrain';
 
 const parseGeo = (geo: number) => `${Math.round(geo * 100) / 100}`
 
-export const search = async (geocode: Geolocation) => {
+export const search = async (geocode: Partial<GeolocationCoordinates>) => {
+  if (!(geocode.latitude && geocode.longitude)) {
+    return {};
+  }
+  
   const gridpointResponse = await fetch(`https://api.weather.gov/points/${parseGeo(geocode.latitude)},${parseGeo(geocode.longitude)}`);
   const parsedGridpointResponse = await gridpointResponse.json();
   if (!parsedGridpointResponse?.properties) return { error: 'Gridpoint Server could not be reached' };

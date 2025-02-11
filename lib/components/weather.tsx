@@ -55,7 +55,7 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateWeather = useCallback(
-    debounce(async (incGeoCode: Geolocation) => {
+    debounce(async (incGeoCode: GeolocationCoordinates) => {
       setLoading(true);
       // if (session?.data?.user) {
       //   session.data.user.geolocation = incGeoCode;
@@ -103,7 +103,7 @@ function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>
     if('geolocation' in navigator) {
       // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
       navigator.geolocation.getCurrentPosition(({ coords }) => {
-        updateWeather({ latitude: coords.latitude, longitude: coords.longitude } as Geolocation);
+        updateWeather({ latitude: coords.latitude, longitude: coords.longitude } as GeolocationCoordinates);
       });
     } 
   }, []);
