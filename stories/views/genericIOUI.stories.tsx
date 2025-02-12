@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { GenericIOUI } from '@/lib/components/views/genericIOUI';
 import { SessionProvider } from 'next-auth/react';
-import { TopBarInner } from '@/lib/components/layout/topBar';
+import { TopBarInner } from '@/lib/components/layout/header';
 
 const meta: Meta<typeof GenericIOUI> = {
   title: 'Views/GenericIOUI',

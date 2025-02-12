@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { CowsayUI } from '@/lib/components/views/cowsay';
 import { SessionProvider } from 'next-auth/react';
-import { TopBarInner } from '@/lib/components/layout/topBar';
+import { TopBarInner } from '@/lib/components/layout/header';
 
 const meta: Meta<typeof CowsayUI> = {
   title: 'Views/Cowsay',

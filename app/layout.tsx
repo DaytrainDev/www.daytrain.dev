@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { Session, getServerSession } from "next-auth";
 
 import "./globals.css";
-import { TopBarSession } from "@/lib/components/layout/topBar";
+import { TopBarSession } from "@/lib/components/layout/header";
 
 const inter = Inter({ subsets: ["latin"] });
 

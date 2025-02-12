@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TopBarInner } from '@/lib/components/layout/topBar';
+import { TopBarInner } from '@/lib/components/layout/header';
 import { SessionProvider } from 'next-auth/react';
 
 // Create a wrapper component for the stories

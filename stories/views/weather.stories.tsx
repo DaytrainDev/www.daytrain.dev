@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { WeatherUI } from '@/lib/components/views/weather';
 import { SessionProvider } from 'next-auth/react';
-import { TopBarInner } from '@/lib/components/layout/topBar';
+import { TopBarInner } from '@/lib/components/layout/header';
 
 const meta: Meta<typeof WeatherUI> = {
   title: 'Views/Weather',
