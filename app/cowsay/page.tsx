@@ -14,7 +14,7 @@ export default async function Page({ searchParams } : any ) {
         id: 'cowsay',
         name: 'cowsay',
         prompt: 'What should the cow say?',
-      }]} label={'Cowsay'} action={'/cowsay'} output={cowsay} />
+      }]} label={'Cowsay'} action={'/api/cowsay'} />
     </main>
   );
 };

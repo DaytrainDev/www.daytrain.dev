@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ChatUI } from '@/lib/components/views/chat';
+import { CowsayUI } from '@/lib/components/views/cowsay';
 import { SessionProvider } from 'next-auth/react';
 import { TopBarInner } from '@/lib/components/layout/topBar';
 
-const meta: Meta<typeof ChatUI> = {
-  title: 'Views/Chat',
-  component: ChatUI,
+const meta: Meta<typeof CowsayUI> = {
+  title: 'Views/Cowsay',
+  component: CowsayUI,
   decorators: [
     (Story) => (
       <SessionProvider session={{ user: { name: 'John Doe', email: 'john@example.com' }, expires: '9999-12-31T00:00:00.000Z' }}>
@@ -15,21 +15,12 @@ const meta: Meta<typeof ChatUI> = {
     ),
   ],
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
   tags: ['autodocs'],
 };
 
 export default meta;
-type Story = StoryObj<typeof ChatUI>;
+type Story = StoryObj<typeof CowsayUI>;
 
-export const Default: Story = {
-  args: {
-    handleSubmit: async (messages: any[], userId: string) => {
-      return {
-        content: 'This is a mock bot response',
-        role: 'assistant'
-      };
-    },
-  },
-};
+export const Default: Story = {};

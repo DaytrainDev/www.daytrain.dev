@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { WeatherUI } from '@/lib/components/views/weather';
 import { SessionProvider } from 'next-auth/react';
+import { TopBarInner } from '@/lib/components/layout/topBar';
 
 const meta: Meta<typeof WeatherUI> = {
   title: 'Views/Weather',
@@ -8,6 +9,7 @@ const meta: Meta<typeof WeatherUI> = {
   decorators: [
     (Story) => (
       <SessionProvider session={{ user: { name: 'John Doe', email: 'john@example.com' }, expires: '9999-12-31T00:00:00.000Z' }}>
+        <TopBarInner />
         <Story />
       </SessionProvider>
     ),

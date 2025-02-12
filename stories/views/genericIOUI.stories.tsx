@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { GenericIOUI } from '@/lib/components/views/genericIOUI';
 import { SessionProvider } from 'next-auth/react';
+import { TopBarInner } from '@/lib/components/layout/topBar';
 
 const meta: Meta<typeof GenericIOUI> = {
   title: 'Views/GenericIOUI',
@@ -8,6 +9,7 @@ const meta: Meta<typeof GenericIOUI> = {
   decorators: [
     (Story) => (
       <SessionProvider session={{ user: { name: 'John Doe', email: 'john@example.com' }, expires: '9999-12-31T00:00:00.000Z' }}>
+        <TopBarInner />
         <Story />
       </SessionProvider>
     ),
@@ -32,17 +34,28 @@ export const Default: Story = {
       {
         id: 'email',
         name: 'email',
-        prompt: 'Enter your email'
+        prompt: 'Enter your email',
+        type: 'email'
       }
     ],
-    label: 'Submit',
+    label: 'Submit Form',
     action: '/api/submit',
-  },
+    outputPrefix: 'Response: ',
+    method: 'POST'
+  }
 };
 
-export const WithOutput: Story = {
+export const SingleInput: Story = {
   args: {
-    ...Default.args,
-    output: 'Submission successful!',
-  },
+    inputs: [
+      {
+        id: 'message',
+        name: 'message',
+        prompt: 'Enter your message'
+      }
+    ],
+    label: 'Send',
+    action: '/api/message',
+    method: 'POST'
+  }
 };

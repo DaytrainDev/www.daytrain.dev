@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ImaGenUI } from '@/lib/components/views/imaGen';
 import { SessionProvider } from 'next-auth/react';
+import { TopBarInner } from '@/lib/components/layout/topBar';
 
 const meta: Meta<typeof ImaGenUI> = {
   title: 'Views/ImaGen',
@@ -8,6 +9,7 @@ const meta: Meta<typeof ImaGenUI> = {
   decorators: [
     (Story) => (
       <SessionProvider session={{ user: { name: 'John Doe', email: 'john@example.com' }, expires: '9999-12-31T00:00:00.000Z' }}>
+        <TopBarInner />
         <Story />
       </SessionProvider>
     ),
