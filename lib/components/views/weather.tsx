@@ -107,7 +107,7 @@ export function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<strin
         updateWeather({ latitude: coords.latitude, longitude: coords.longitude } as GeolocationCoordinates);
       });
     } 
-  }, []);
+  }, [updateWeather]);
 
   const location = forecast?.location ? `${forecast?.location?.city}, ${forecast?.location?.state}` : '';
   const timeObj = forecast?.forecast?.updateTime && new Date(forecast?.forecast?.updateTime);

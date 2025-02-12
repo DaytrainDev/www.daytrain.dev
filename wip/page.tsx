@@ -35,16 +35,6 @@ export default async function Home() {
         <div className="flex flex-row items-center justify-center">
           {[
             {
-              title: "ChatBot",
-              description: "Chat Bot.",
-              href: "/wip/chat",
-            },
-            {
-              title: "ImaGen",
-              description: "Image Generation.",
-              href: "/wip/imagen",
-            },
-            {
               title: "3D Capsule Demo",
               description: "WASD to move the Capsule.",
               href: "/wip/babylonjs",

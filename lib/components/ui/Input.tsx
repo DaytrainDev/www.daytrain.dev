@@ -8,7 +8,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className = '', label, error, ...props }, ref) => {
+  function InputComponent({ className = '', label, error, ...props }, ref) {
     return (
       <div className="w-full">
         {label && (
@@ -39,3 +39,5 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
+
+Input.displayName = 'Input';
