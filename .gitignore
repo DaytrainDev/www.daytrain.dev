@@ -37,3 +37,19 @@ yarn-error.log*
 next-env.d.ts
 
 *storybook.log
+
+# RPG Maker MZ large assets (stored in Vercel Blob)
+lib/rpg/audio/
+lib/rpg/img/
+lib/rpg/effects/
+lib/rpg/movies/
+lib/rpg/fonts/
+
+# Keep these in git:
+# lib/rpg/js/ - plugins and game code
+# lib/rpg/data/ - JSON game data (will migrate to Postgres)
+# lib/rpg/css/ - stylesheets
+# lib/rpg/icon/ - small icons
+
+.vercel
+.env*.local

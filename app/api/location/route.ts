@@ -1,21 +1,39 @@
 import { search as geoSearch } from "@/lib/services/geocode";
-
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
-export async function GET(request: Request, { params } : {params: { searchText?: string }}) {
+/**
+ * Location/Geocoding API endpoint
+ *
+ * Query params:
+ * - q: Search for a location (e.g., /api/location?q=Denver,CO)
+ *
+ * Returns: { latitude, longitude } or { error }
+ */
+export async function GET(request: NextRequest) {
   const session = await getServerSession();
-  
+
   if (!session) {
-    return NextResponse.json({ message: 'You must be logged in to use this endpoint.'},
-      { status: 400 });
+    return NextResponse.json(
+      { error: 'Authentication required' },
+      { status: 401 }
+    );
   }
 
-  if (!params?.searchText) {
-    return NextResponse.json({ message: 'Please include a value for `searchText`.'},
-      { status: 400 });
+  const q = request.nextUrl.searchParams.get('q');
+
+  if (!q || q.trim().length < 2) {
+    return NextResponse.json(
+      { error: 'Please provide a search query (q parameter)' },
+      { status: 400 }
+    );
   }
-  
-  // TODO: return location data when user is authenticated
-  return NextResponse.json(await geoSearch(params?.searchText));
+
+  const result = await geoSearch(q);
+
+  if (result.error) {
+    return NextResponse.json({ error: result.error }, { status: 400 });
+  }
+
+  return NextResponse.json(result);
 }

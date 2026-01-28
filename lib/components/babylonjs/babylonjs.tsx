@@ -69,7 +69,6 @@ const onSceneReady = (scene: any, canvas: any) => {
 
 const onRender = (scene: any) => {
   if (scene) {
-    // console.log(scene);
   }
 };
 

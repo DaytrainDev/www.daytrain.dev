@@ -1,7 +1,6 @@
 'use client';
 
 import { ButtonHTMLAttributes, ReactNode } from 'react';
-import useDarkMode from '@/lib/hooks/useDarkMode';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline';
@@ -9,14 +8,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
-export function Button({ 
-  variant = 'primary', 
-  size = 'md', 
-  children, 
+export function Button({
+  variant = 'primary',
+  size = 'md',
+  children,
   className = '',
-  ...props 
+  ...props
 }: ButtonProps) {
-  const { isDark } = useDarkMode();
 
   const baseStyles = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
   

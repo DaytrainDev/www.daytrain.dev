@@ -1,195 +1,294 @@
 'use client';
 import Image from 'next/image';
-import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Session } from 'next-auth';
 import { SessionProvider, useSession } from 'next-auth/react';
-// TODO: make this css a module
-import './weather.css'
+import './weather.css';
 
-// TODO: refactor helper methods from view
-const constants = {
-  "days": ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
-};
+interface WeatherPeriod {
+  number: number;
+  name: string;
+  startTime: string;
+  temperature: number;
+  icon: string;
+  shortForecast: string;
+  detailedForecast: string;
+}
 
-// https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-122.php
-const toOrdinalSuffix = (num: string) => {
-  const int = parseInt(num),
-    digits = [int % 10, int % 100],
-    ordinals = ['st', 'nd', 'rd', 'th'],
-    oPattern = [1, 2, 3, 4],
-    tPattern = [11, 12, 13, 14, 15, 16, 17, 18, 19];
+interface Forecast {
+  updateTime: string;
+  periods: WeatherPeriod[];
+}
+
+interface Location {
+  city: string;
+  state: string;
+}
+
+interface WeatherData {
+  forecast?: Forecast;
+  location?: Location;
+  error?: string;
+}
+
+interface GeoLocation {
+  latitude?: number;
+  longitude?: number;
+  error?: string;
+}
+
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+const toOrdinalSuffix = (num: number): string => {
+  const digits = [num % 10, num % 100];
+  const ordinals = ['st', 'nd', 'rd', 'th'];
+  const oPattern = [1, 2, 3, 4];
+  const tPattern = [11, 12, 13, 14, 15, 16, 17, 18, 19];
   return oPattern.includes(digits[0]) && !tPattern.includes(digits[1])
     ? ordinals[digits[0] - 1]
     : ordinals[3];
 };
 
-const forecastItem = (item: any) => {
-  const dateObj = item?.startTime && new Date(item?.startTime);
-  const dayOfWeek = dateObj && `${constants.days[dateObj.getDay(dateObj)]}`;
-  const dayOfMonth = dateObj && `${dateObj.getDate(dateObj)}`;
-  const ordinal = dateObj && `${toOrdinalSuffix(dayOfMonth)}`;
-  
+function ForecastItem({ item }: { item: WeatherPeriod }) {
+  const dateObj = new Date(item.startTime);
+  const dayOfMonth = dateObj.getDate();
+  const ordinal = toOrdinalSuffix(dayOfMonth);
+
   return (
-    <div key={item.number} className="daily-forecast-item">
+    <div className="daily-forecast-item">
       <p>{dayOfMonth}<small>{ordinal}</small></p>
-      <p>{item?.name}</p>
-      {item?.icon && <Image
-        className="daily-forecast-icon"
-        src={item?.icon}
-        alt={item?.shortForecast}
-        width={90}
-        height={90}
-        priority
-      />}
-      <div className="daily-forecast-temp">{`${item?.temperature}`}&deg;</div>
-      {item?.shortForecast}
+      <p>{item.name}</p>
+      {item.icon && (
+        <Image
+          className="daily-forecast-icon"
+          src={item.icon}
+          alt={item.shortForecast}
+          width={90}
+          height={90}
+          priority
+        />
+      )}
+      <div className="daily-forecast-temp">{item.temperature}&deg;</div>
+      {item.shortForecast}
     </div>
-  )
+  );
 }
 
-export function WeatherUI({ handleGeoSearch, handleWeatherSearch }: Record<string, any>) {
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+interface WeatherUIProps {
+  handleGeoSearch: (searchText: string) => Promise<GeoLocation>;
+  handleWeatherSearch: (geocode: Coordinates) => Promise<WeatherData>;
+}
+
+export function WeatherUI({ handleGeoSearch, handleWeatherSearch }: WeatherUIProps) {
   const session = useSession();
-  const searchRef = useRef(null as any);
-  const [forecast, setForecast]: any = useState(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const [forecast, setForecast] = useState<WeatherData | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const requestIdRef = useRef(0);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateWeather = useCallback(
-    debounce(async (incGeoCode: GeolocationCoordinates) => {
-      setLoading(true);
-      // if (session?.data?.user) {
-      //   session.data.user.geolocation = incGeoCode;
-      //   if (!session.data.user.store) {
-      //     session.data.user.store = {};
-      //   }
-      //   session.data.user.store.weatherSearch = searchRef.current.value;
-      //   await session.update();
-      // }
-      const newForecast = await handleWeatherSearch(incGeoCode).catch(() => {
-        setErrorMsg('Could not update forecast. Please try again.');
-      });
+  const fetchWeather = useCallback(async (geocode: Coordinates, requestId: number) => {
+    try {
+      const newForecast = await handleWeatherSearch(geocode);
+
+      // Only update if this is still the latest request
+      if (requestId !== requestIdRef.current) return;
+
       if (newForecast?.error) {
         setErrorMsg(newForecast.error);
       } else if (newForecast) {
         setForecast(newForecast);
-        // searchRef.current.value = session?.data?.user?.store?.weatherSearch;
       }
-      setLoading(false);
-    }, 1250),
-    []
-  );
+    } catch {
+      if (requestId !== requestIdRef.current) return;
+      setErrorMsg('Could not update forecast. Please try again.');
+    } finally {
+      if (requestId === requestIdRef.current) {
+        setLoading(false);
+      }
+    }
+  }, [handleWeatherSearch]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleSearch = useCallback(
-    debounce(async () => {
-      const incSearchText = searchRef.current.value;
-      if (!incSearchText || incSearchText.length < 2) return;
-      const newGeoCode = await handleGeoSearch(incSearchText);
-      if (newGeoCode?.error) {
-        setErrorMsg(newGeoCode.error);
-        return;
+  const handleSearch = useCallback((searchText: string) => {
+    if (!searchText || searchText.length < 2) return;
+
+    // Cancel pending debounce
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Single debounce for the entire search flow
+    debounceTimerRef.current = setTimeout(async () => {
+      const currentRequestId = ++requestIdRef.current;
+
+      setLoading(true);
+      setErrorMsg('');
+
+      try {
+        const newGeoCode = await handleGeoSearch(searchText);
+
+        // Check if still latest request
+        if (currentRequestId !== requestIdRef.current) return;
+
+        if (newGeoCode?.error || !newGeoCode?.latitude || !newGeoCode?.longitude) {
+          setErrorMsg(newGeoCode?.error || 'Location not found');
+          setLoading(false);
+          return;
+        }
+
+        await fetchWeather(
+          { latitude: newGeoCode.latitude, longitude: newGeoCode.longitude },
+          currentRequestId
+        );
+      } catch {
+        if (currentRequestId !== requestIdRef.current) return;
+        setErrorMsg('Search failed. Please try again.');
+        setLoading(false);
       }
-      await updateWeather(newGeoCode);
-    }, 1250),
-    [updateWeather]
-  );
-  
+    }, 500);
+  }, [handleGeoSearch, fetchWeather]);
+
+  // Geolocation on mount
   useEffect(() => {
-    // console.log('session?.data?.user', session?.data?.user);
-    // if (session?.data?.user?.geolocation) {
-    //   searchRef.current.value = session?.data?.user?.store?.weatherSearch;
-    //   updateWeather(session.data.user.geolocation as Geolocation);
-    // } else 
-    if('geolocation' in navigator) {
-      // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
-      navigator.geolocation.getCurrentPosition(({ coords }) => {
-        updateWeather({ latitude: coords.latitude, longitude: coords.longitude } as GeolocationCoordinates);
-      });
-    } 
-  }, [updateWeather]);
+    if (!('geolocation' in navigator)) return;
 
-  const location = forecast?.location ? `${forecast?.location?.city}, ${forecast?.location?.state}` : '';
-  const timeObj = forecast?.forecast?.updateTime && new Date(forecast?.forecast?.updateTime);
-  const time = timeObj && `updated ${timeObj.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`;
-  const today = forecast?.forecast?.periods[0];
-  const extendedForecast = forecast?.forecast?.periods.slice(1);
-  // TODO: group day and night forecasts
+    const currentRequestId = ++requestIdRef.current;
+    setLoading(true);
 
-  return (
-    (session.status === 'loading')
-    ? (<div className={`${session.status === 'loading' ? '' : 'hidden'}`}>Loading...</div>)
-    : !(session.status === 'authenticated')
-    ? (<>
-        <div>You need to be logged in to weather.</div>
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        if (currentRequestId !== requestIdRef.current) return;
+        fetchWeather(
+          { latitude: coords.latitude, longitude: coords.longitude },
+          currentRequestId
+        );
+      },
+      () => {
+        // Geolocation denied or failed - user can still search manually
+        if (currentRequestId === requestIdRef.current) {
+          setLoading(false);
+        }
+      }
+    );
+
+    // Cleanup
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [fetchWeather]);
+
+  const location = forecast?.location
+    ? `${forecast.location.city}, ${forecast.location.state}`
+    : '';
+  const timeObj = forecast?.forecast?.updateTime
+    ? new Date(forecast.forecast.updateTime)
+    : null;
+  const time = timeObj
+    ? `updated ${timeObj.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
+    : '';
+  const today = forecast?.forecast?.periods?.[0];
+  const extendedForecast = forecast?.forecast?.periods?.slice(1);
+
+  if (session.status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (session.status !== 'authenticated') {
+    return (
+      <>
+        <div>You need to be logged in to use weather.</div>
         <div className="link-back">
           <a href="/" rel="noreferrer">...back to home</a>
         </div>
       </>
-    )
-    : (
+    );
+  }
+
+  return (
     <main className="container">
       <div className="header">
-        <div className="header-label">
-          US Weather
-        </div>
+        <div className="header-label">US Weather</div>
         <div className="control-wrapper">
-          <input 
+          <input
             ref={searchRef}
-            defaultValue={session?.data?.user?.store?.weatherSearch ?? ''}
-            onChange={handleSearch}
+            onChange={(e) => handleSearch(e.target.value)}
             className="control text-slate-800"
-            type="text" 
-            placeholder="Enter Location..." 
+            type="text"
+            placeholder="Enter Location..."
           />
         </div>
       </div>
-      <div className={loading ? 'content' : 'hidden'}> 
-        Loading...
-      </div>
-      <div role="alert" className={!errorMsg || loading ? 'hidden' : 'relative block w-full p-4 mb-4 text-base leading-5 text-white bg-red-500 font-regular'}>
-        {errorMsg}
-      </div>
-      <div className={!today || loading || errorMsg ? 'hidden' : ''}>
-        <div className="content">
-          <div className="icon-wrapper">
-            {today?.icon && <Image
-              className="rounded-full"
-              src={today?.icon}
-              alt={today?.shortForecast}
-              width={180}
-              height={180}
-              priority
-            />}
+
+      {loading && (
+        <div className="content">Loading...</div>
+      )}
+
+      {errorMsg && !loading && (
+        <div
+          role="alert"
+          className="relative block w-full p-4 mb-4 text-base leading-5 text-white bg-red-500 font-regular"
+        >
+          {errorMsg}
+        </div>
+      )}
+
+      {today && !loading && !errorMsg && (
+        <>
+          <div className="content">
+            <div className="icon-wrapper">
+              {today.icon && (
+                <Image
+                  className="rounded-full"
+                  src={today.icon}
+                  alt={today.shortForecast}
+                  width={180}
+                  height={180}
+                  priority
+                />
+              )}
+            </div>
+            <div className="current-wrapper">
+              <div className="location">{location}</div>
+              <div className="temp">{today.temperature}&deg;</div>
+              <div className="short-forecast">{today.shortForecast}</div>
+              <div className="update-time">{time}</div>
+            </div>
           </div>
-          <div className="current-wrapper">
-            <div className="location">{location}</div>
-            <div className="temp">{`${today?.temperature}`}&deg;</div>
-            <div className="short-forecast">{today?.shortForecast}</div>
-            <div className="update-time">{time}</div>
+          <div className="detail-forecast">{today.detailedForecast}</div>
+          <hr />
+          <div className="daily-forecast-label">Extended Forecast</div>
+          <div className="daily-forecast-content">
+            {extendedForecast?.map((item) => (
+              <ForecastItem key={item.number} item={item} />
+            ))}
           </div>
-        </div>
-        <div className="detail-forecast">{today?.detailedForecast}</div>
-        <hr/>
-        <div className="daily-forecast-label"> 
-          Extended Forecast
-        </div>
-        <div className="daily-forecast-content"> 
-          {extendedForecast?.map(forecastItem)}
-        </div>
-      </div>
+        </>
+      )}
     </main>
-  ));
+  );
 }
 
-export const WeatherSession = ({ session, handleGeoSearch, handleWeatherSearch }: any) => {
+interface WeatherSessionProps {
+  session: Session | null;
+  handleGeoSearch: (searchText: string) => Promise<GeoLocation>;
+  handleWeatherSearch: (geocode: Coordinates) => Promise<WeatherData>;
+}
 
+export function WeatherSession({ session, handleGeoSearch, handleWeatherSearch }: WeatherSessionProps) {
   return (
     <SessionProvider session={session}>
-      {session && <WeatherUI
-        handleGeoSearch={handleGeoSearch} 
+      <WeatherUI
+        handleGeoSearch={handleGeoSearch}
         handleWeatherSearch={handleWeatherSearch}
-      />}
+      />
     </SessionProvider>
   );
 }

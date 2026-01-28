@@ -44,12 +44,6 @@ export default async function Home() {
               href: "https://github.com/DaytrainDev/www.daytrain.dev",
               target: "_blank",
             },
-            // {
-            //   title: "Patreon",
-            //   description: "Give money.",
-            //   href: "https://www.patreon.com/DaytrainDev",
-            //   target: "_blank",
-            // },
           ].map(MapItem)}
         </div>
       </div>

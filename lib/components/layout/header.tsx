@@ -3,7 +3,6 @@ import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo } from "react";
 import { Session } from "next-auth";
-// import { useRef } from "react";
 
 interface TopBarProps {
   session: Session | null;
@@ -45,7 +44,6 @@ export const TopBarInner = () => {
           <a className="p-2" href="/usweather">US Weather</a>
           <a className="p-2" href="/imagen">ImaGen</a>
           <a className="p-2" href="/chat">ChatBot</a>
-          {/* <a className="p-2" href="/cowsay">Cowsay</a> */}
           <button className="p-2 ml-auto"
             onClick={() => {
               handleLogout();

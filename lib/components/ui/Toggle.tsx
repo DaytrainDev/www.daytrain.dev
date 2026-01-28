@@ -1,7 +1,6 @@
 'use client';
 
 import { ButtonHTMLAttributes } from 'react';
-import useDarkMode from '@/lib/hooks/useDarkMode';
 
 type ToggleProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> & {
   label?: string;
@@ -9,14 +8,13 @@ type ToggleProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> & {
   onToggle?: (checked: boolean) => void;
 };
 
-export function Toggle({ 
-  label, 
-  checked = false, 
+export function Toggle({
+  label,
+  checked = false,
   onToggle,
   className = '',
-  ...props 
+  ...props
 }: ToggleProps) {
-  const { isDark } = useDarkMode();
   
   const handleToggle = () => {
     onToggle?.(!checked);

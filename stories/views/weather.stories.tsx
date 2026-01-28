@@ -24,32 +24,42 @@ export default meta;
 type Story = StoryObj<typeof WeatherUI>;
 
 const mockForecast = {
-  periods: [
-    {
-      number: 1,
-      name: "Today",
-      startTime: "2025-02-11T12:00:00-06:00",
-      temperature: 72,
-      shortForecast: "Sunny",
-      icon: "https://api.weather.gov/icons/land/day/few?size=medium"
-    },
-    {
-      number: 2,
-      name: "Tonight",
-      startTime: "2025-02-11T18:00:00-06:00",
-      temperature: 55,
-      shortForecast: "Clear",
-      icon: "https://api.weather.gov/icons/land/night/few?size=medium"
-    },
-    {
-      number: 3,
-      name: "Tomorrow",
-      startTime: "2025-02-12T06:00:00-06:00",
-      temperature: 75,
-      shortForecast: "Partly Cloudy",
-      icon: "https://api.weather.gov/icons/land/day/sct?size=medium"
-    }
-  ]
+  forecast: {
+    updateTime: new Date().toISOString(),
+    periods: [
+      {
+        number: 1,
+        name: "Today",
+        startTime: "2025-02-11T12:00:00-06:00",
+        temperature: 72,
+        shortForecast: "Sunny",
+        detailedForecast: "Sunny with a high near 72.",
+        icon: "https://api.weather.gov/icons/land/day/few?size=medium"
+      },
+      {
+        number: 2,
+        name: "Tonight",
+        startTime: "2025-02-11T18:00:00-06:00",
+        temperature: 55,
+        shortForecast: "Clear",
+        detailedForecast: "Clear with a low around 55.",
+        icon: "https://api.weather.gov/icons/land/night/few?size=medium"
+      },
+      {
+        number: 3,
+        name: "Tomorrow",
+        startTime: "2025-02-12T06:00:00-06:00",
+        temperature: 75,
+        shortForecast: "Partly Cloudy",
+        detailedForecast: "Partly cloudy with a high near 75.",
+        icon: "https://api.weather.gov/icons/land/day/sct?size=medium"
+      }
+    ]
+  },
+  location: {
+    city: "Minneapolis",
+    state: "MN"
+  }
 };
 
 export const Default: Story = {
@@ -60,7 +70,7 @@ export const Default: Story = {
         longitude: -93.2650
       };
     },
-    handleWeatherSearch: async (geoCode: GeolocationCoordinates) => {
+    handleWeatherSearch: async (geocode: { latitude: number; longitude: number }) => {
       return mockForecast;
     }
   }

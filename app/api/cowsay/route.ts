@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
-import cowsay from 'cowsay';
+import * as cowsay from 'cowsay';
 import { getServerSession } from 'next-auth';
 
 export async function POST(request: Request) {
   const session = await getServerSession();
   
   if (!session) {
-    return NextResponse.json({ message: 'You must be logged in to use this endpoint.'},
-      { status: 400 });
+    return NextResponse.json(
+      { error: 'Authentication required' },
+      { status: 401 }
+    );
   }
 
   try {
